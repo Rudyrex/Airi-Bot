@@ -68,6 +68,7 @@
         "formdata-node": "^4.3.2",
         "fs": "^0.0.1-security",
         "hispamemes": "^1.0.7",
+        "google-libphonenumber": "3.2.38",
         "human-readable": "^0.2.1",
         "imagemaker.js": "^2.0.4",
         "instagram-url-direct": "^1.0.12",
