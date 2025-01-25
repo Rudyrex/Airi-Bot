@@ -1,0 +1,7 @@
+{
+  "name": "Airi-Bot",
+  "description": "Bot de WhatsApp",
+  "repository": "https://github.com/Rudyrex/Airi-Bot",
+  "logo": "https://raw.githubusercontent.com/Rudyrex/Airi-Bot/refs/heads/main/src/img/icon1.jpg",
+  "keywords": ["bot", "whatsapp", "whatsapp-bot"]
+}
