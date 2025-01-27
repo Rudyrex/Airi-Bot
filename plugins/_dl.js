@@ -4,7 +4,7 @@ const handler = async (m, { conn, text }) => {
   if (!m.quoted.text.includes('Responde con dl + num del resultado para descargar')) {
     return m.reply('Etiqueta el mensaje que contenga el resultado de YouTube Play.');
   }
-  if (!m.quoted.isBaileys) {
+  if (!m.quoted.fromMe) {
     return m.reply('Etiqueta un mensaje mío que contenga el resultado de YouTube Play.');
   }
   let urls = m.quoted.text.match(
