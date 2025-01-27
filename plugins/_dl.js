@@ -15,9 +15,9 @@ const handler = async (m, { conn, text }) => {
   );
   if (!urls) return m.reply('No se encontraron enlaces en el mensaje citado.');
   let numero = parseInt(text.trim().split(' ')[1], 10); 
-  if (isNaN(numero) || numero < 1 || numero > urls.length) {
+  /*if (isNaN(numero) || numero < 1 || numero > urls.length) {
     return m.reply('Por favor, proporciona un número válido dentro del rango de resultados.');
-  }
+  }*/
   let url = urls[numero - 1];
   await m.react('🕓'); 
   try {
