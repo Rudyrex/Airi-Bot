@@ -1,6 +1,6 @@
 
 import fetch from 'node-fetch';
-
+import { apis } from '../exports.js';
 
 let handler = async (m, { text, conn, args, usedPrefix, command }) => {
     
@@ -10,15 +10,15 @@ let handler = async (m, { text, conn, args, usedPrefix, command }) => {
     conn.reply(m.chat, '⏳ Descargando el video...', m);
     
     try {
-        let api1 = await fetch(`https://deliriussapi-oficial.vercel.app/download/facebook?url=${fburl}`)    
+        let api1 = await fetch(`${apis.delirius}download/facebook?url=${fburl}`)    
         let result1 = await api1.json()
         let downloadUrl1 = result1.urls.sd;
         
-        await m.react('✅')
+        await m.react('🐦')
         await conn.sendMessage(m.chat, { video: { url: downloadUrl1 }, fileName: `Facebook.mp4`, mimetype: 'video/mp4', caption: null }, { quoted: m });
     } catch (e1) {
         try {
-            let api2 = await fetch(`https://api.dorratz.com/fbvideo?url=${fburl}`)    
+            let api2 = await fetch(`${apis.dorratz}fbvideo?url=${fburl}`)    
             let result2 = await api2.json()
             let downloadUrl2 = result2.result.sd;
             
@@ -33,3 +33,4 @@ let handler = async (m, { text, conn, args, usedPrefix, command }) => {
 
 handler.command = ['facebook', 'fb', 'fbdl'];
 export default handler;
+                                                 
