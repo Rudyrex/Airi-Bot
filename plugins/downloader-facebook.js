@@ -11,11 +11,12 @@ let handler = async (m, { text, conn, args, usedPrefix, command }) => {
     
     try {
         let api1 = await fetch(`${apis.delirius}download/facebook?url=${fburl}`)    
+        let urlf = `${apis.delirius}download/facebook?url=${fburl}`;
         let result1 = await api1.json()
         let downloadUrl1 = result1.urls.sd;
         
         await m.react('🐦')
-        await m.reply(api1);
+        await m.reply(urlf);
         await conn.sendMessage(m.chat, { video: { url: downloadUrl1 }, fileName: `Facebook.mp4`, mimetype: 'video/mp4', caption: null }, { quoted: m });
     } catch (e1) {
         try {
