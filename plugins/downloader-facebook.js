@@ -18,12 +18,7 @@ let handler = async (m, { text, conn, args, usedPrefix, command }) => {
         await await conn.sendMessage(m.chat, { video: { url: downloadUrl1 }, fileName: `Facebook.mp4`, mimetype: 'video/mp4', caption: null }, { quoted: m });
     } catch (e1) {
         try {
-            let api2 = await fetch(`${apis.dorratz}fbvideo?url=${fburl}`)    
-            let result2 = await api2.json()
-            let downloadUrl2 = result2.result.sd;
-            
-            await m.react('✅')
-            await conn.sendMessage(m.chat, { video: { url: downloadUrl2 }, fileName: `Facebook.mp4`, mimetype: 'video/mp4', caption: null }, { quoted: m });
+
         } catch (e2) {
             await conn.reply(m.chat, e2.message, m);
         }
