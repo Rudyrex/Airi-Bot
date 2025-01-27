@@ -14,7 +14,7 @@ let handler = async (m, { text, conn, args, usedPrefix, command }) => {
         let result1 = await api1.json()
         let downloadUrl1 = result1.urls[0].hd || result1.urls[1].sd;
         
-        
+        await m.reply(downloadUrl1);
         await conn.sendMessage(m.chat, { video: { url: downloadUrl1 }, fileName: `Facebook.mp4`, mimetype: 'video/mp4', caption: null }, { quoted: m });
     } catch (e1) {
         try {
