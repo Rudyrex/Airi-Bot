@@ -48,7 +48,7 @@ _*🎶 Enviando música...*_`.trim();
             const downloadUrl1 = result1.data.url;
             await conn.sendMessage(m.chat, { audio: { url: downloadUrl1 }, fileName: 'audio.mp3', mimetype: 'audio/mpeg', caption: null, quoted: m });
         } catch (e1) {
-            m.reply(`❌ Ocurrió un error al descargar el audio\nError:${e1.message}`);
+            
             try {
                 const api2 = `${apis.delirius}download/spotifydlv3?url=${encodeURIComponent(url)}`;
                 const response2 = await fetch(api2);
@@ -58,7 +58,7 @@ _*🎶 Enviando música...*_`.trim();
                 await conn.sendMessage(m.chat, { audio: { url: downloadUrl2 }, fileName: 'audio.mp3', mimetype: 'audio/mpeg', caption: null, quoted: m });
                 
             } catch (e2) {
-                m.reply(`❌ Ocurrió un error al descargar el audio\nError:${e2.message}`);
+                
                 try {
                     const api3 = `${apis.rioo}api/spotify?url=${encodeURIComponent(url)}`;
                     const response3 = await fetch(api3);
@@ -68,6 +68,7 @@ _*🎶 Enviando música...*_`.trim();
                     await conn.sendMessage(m.chat, { audio: { url: downloadUrl3 }, fileName: 'audio.mp3', mimetype: 'audio/mpeg', caption: null, quoted: m });
                     
                 } catch (e3) {
+                    
                     try {
                         const api4 = `${apis.ryzen}api/downloader/spotify?url=${encodeURIComponent(url)}`;
                         const response4 = await fetch(api4);
