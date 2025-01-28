@@ -45,7 +45,7 @@ const handler = async (m, { conn, args, command, usedPrefix }) => {
                         
                         console.log(e4);
                         m.react('❌');
-                        m.reply(m.chat, `*[ ❌ ]* Ocurrió un error al descargar el archivo mp3, inténtalo más tarde\nError:${e4}`, m);
+                        conn.reply(m.chat, `*[ ❌ ]* Ocurrió un error al descargar el archivo mp3, inténtalo más tarde\nError:${e4}`, m);
                         
                 }
             }
