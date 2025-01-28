@@ -1,4 +1,4 @@
-let handler = async (m, { conn, text }) => {
+let handler = async (m, { conn }) => {
     try {
         // Comprobar si el mensaje es una respuesta
         if (m.quoted) {
@@ -11,12 +11,15 @@ let handler = async (m, { conn, text }) => {
                 console.log('El mensaje citado contiene resultados de búsqueda.');
 
                 // Validar que el usuario ingresó un número
-                if (!/^\d+$/.test(text)) {
-                    console.log('Texto ingresado no es un número:', text);
+                let userInput = m.text.trim(); // Obtener el texto ingresado por el usuario
+                console.log('Texto ingresado por el usuario:', userInput);
+
+                if (!/^\d+$/.test(userInput)) {
+                    console.log('Texto ingresado no es un número:', userInput);
                     return m.reply('Por favor, responde con un número válido correspondiente al ID de la lista.');
                 }
 
-                let id = Number(text); // Convertir texto ingresado a número
+                let id = Number(userInput); // Convertir texto ingresado a número
                 console.log('ID ingresado:', id);
 
                 // Extraer los enlaces del texto citado
@@ -59,4 +62,4 @@ handler.customPrefix = /^\d+$/; // Escuchar mensajes que sean solo números
 handler.command = new RegExp; // No se activa como comando, sino por el prefijo personalizado
 
 export default handler;
-                        
+                    
