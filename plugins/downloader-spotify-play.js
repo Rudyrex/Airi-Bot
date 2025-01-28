@@ -4,7 +4,7 @@ import { apis } from '../exports.js';
 
 const handler = async (m, {conn, command, args, text, usedPrefix}) => {
 
-    if (!text) throw `_*[ ⚠️ ] Agrega lo que quieres buscar en Spotify*_\n\n_Ejemplo:_\n.play Marshmello Moving On`;
+    if (!text) m.reply(`_*[ ⚠️ ] Agrega lo que quieres buscar en Spotify*_\n\n_Ejemplo:_\n.play Marshmello Moving On`);
 
     try { 
         
