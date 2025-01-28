@@ -3,7 +3,7 @@ export const apis = {
   delirius: 'https://delirius-apiofc.vercel.app/',
   siputzx: 'https://api.siputzx.my.id/api/',
   cloudseek: 'https://cloudseek-api.vercel.app/',
-  random1: 'https://restapi.apibotwa.biz.id/'
+  rioo: 'https://restapi.apibotwa.biz.id/'
 };
 
 const iconUrls = [
