@@ -1,4 +1,36 @@
 
+import yts from 'yt-search'
+
+let handler = async (m, { conn, text }) => {
+  if (!text) throw `✳️ Ingresa un texto para buscar en YouTube.`
+
+  let res = await yts(text)
+  const videos = res.videos.slice(0, 10)
+
+  if (videos.length) {
+    let teks = videos.map((v, index) => `
+╭─🌱──✦ ${index + 1}
+│⥤📝 *Título:* ${v.title}
+│⥤⏱️ *Duración:* ${v.timestamp}
+│⥤🌐 *Publicado:* ${v.ago}
+│⥤⭐ *Vistas:* ${v.views.toLocaleString()}
+│⥤🔗 *Link:* ${v.url}
+╰─🌱──✦
+`.trim()).join('\n________________________\n\n')
+
+    conn.sendFile(m.chat, videos[0].image, 'yts.jpeg', teks, m)
+  } else {
+    throw `No se encontraron resultados.`
+  }
+}
+
+handler.help = ['ytsearch']
+handler.tags = ['dl']
+handler.command = ['ytsearch', 'yts']
+
+export default handler
+
+/*
 import { apis } from '../exports.js';
 import axios from 'axios';
 
@@ -89,3 +121,4 @@ let handler = async (message, { conn, text }) => {
 handler.command = ['ytsearch', 'yts'];
 
 export default handler;
+*/
