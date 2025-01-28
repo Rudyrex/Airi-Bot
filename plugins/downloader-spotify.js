@@ -43,9 +43,9 @@ const handler = async (m, { conn, args, command, usedPrefix }) => {
                     await conn.sendMessage(m.chat, { audio: { url: downloadUrl4 }, fileName: 'audio.mp3', mimetype: 'audio/mpeg', caption: null, quoted: m });
                 } catch (e4) {
                         
-                        console.log(e);
+                        console.log(e4);
                         m.react('❌');
-                        m.reply(m.chat, `_*[ ❌ ] Ocurrió un error al descargar el archivo mp3, inténtalo más tarde*_`, m);
+                        m.reply(m.chat, `*[ ❌ ]* Ocurrió un error al descargar el archivo mp3, inténtalo más tarde\nError:${e4}`, m);
                         
                 }
             }
