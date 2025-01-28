@@ -3,6 +3,7 @@ export const apis = {
   delirius: 'https://delirius-apiofc.vercel.app/',
   siputzx: 'https://api.siputzx.my.id/api/',
   cloudseek: 'https://cloudseek-api.vercel.app/',
+  ryzen: 'https://apidl.asepharyana.cloud/',
   rioo: 'https://restapi.apibotwa.biz.id/'
 };
 
