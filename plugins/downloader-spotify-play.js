@@ -68,7 +68,17 @@ _*🎶 Enviando música...*_`.trim();
                     await conn.sendMessage(m.chat, { audio: { url: downloadUrl3 }, fileName: 'audio.mp3', mimetype: 'audio/mpeg', caption: null, quoted: m });
                     
                 } catch (e3) {
-                    m.reply(`❌ Ocurrió un error al descargar el audio\nError:${result3}`);
+                    try {
+                        const api4 = `${apis.ryzen}api/downloader/spotify?url=${encodeURIComponent(url)}`;
+                        const response4 = await fetch(api4);
+                        const result4 = await response4.json();
+                    
+                        const downloadUrl4 = result4.data.response;
+                        await conn.sendMessage(m.chat, { audio: { url: downloadUrl4 }, fileName: 'audio.mp3', mimetype: 'audio/mpeg', caption: null, quoted: m });
+                    
+                    } catch (e4) {
+                        m.reply(`❌ Ocurrió un error al descargar el audio\nError:${e4.message}`);
+                    }
                 }
             }
         }
