@@ -62,7 +62,7 @@ _*🎶 Enviando música...*_`.trim();
                     const response3 = await fetch(api3);
                     const result3 = await response3.json();
                     
-                    const downloadUrl3 = result3.data.url;
+                    const downloadUrl3 = result3.data.response;
                     await conn.sendMessage(m.chat, { audio: { url: downloadUrl3 }, fileName: 'audio.mp3', mimetype: 'audio/mpeg', caption: null, quoted: m });
                     
                 } catch (e3) {
