@@ -6,7 +6,8 @@ const handler = async (m, { conn, args, command, usedPrefix }) => {
     if (!args[0]) {
         return conn.reply(m.chat, `_*[ ⚠️ ] Agrega un enlace de Spotify*_`, m);
     }
-    
+
+    const url = args[0];
     m.react('⏳');
     try {
         
