@@ -6,47 +6,52 @@ const handler = async (m, { conn, args, command, usedPrefix }) => {
     if (!args[0]) {
         return conn.reply(m.chat, `_*[ ⚠️ ] Agrega un enlace de Spotify*_`, m);
     }
-
+    
+    m.react('⏳');
     try {
-
-        await conn.reply(m.chat, `_*[ ⏳ ] Descargando mp3...*_`, m);
         
-        if (command==='spotifydl') {
-            const apiUrl = `${apis.delirius}download/spotifydl?url=${encodeURIComponent(args[0])}`;
-            const response = await fetch(apiUrl);
-            const data = await response.json();
-
-            if (data.data && data.data.url) {
-                const downloadUrl = data.data.url;
-                const filename = `${data.data.title || 'audio'}.mp3`;
-                const thumb = data.data.image;
-                await conn.sendMessage(m.chat, { audio: { url: downloadUrl }, fileName: filename, mimetype: 'audio/mpeg', caption: `╭━❰  *SPOTIFY*  ❱━⬣\n${filename}\n╰━❰ *${botname}* ❱━⬣`, quoted: m })
-                //await conn.sendFile(m.chat, downloadUrl, filename, `Titulo: ${filename}`, m);
-            } else {
-                throw new Error('_*[ ❌ ] Ocurrió un error al descargar el  archivo mp3_');
+        const api1 = `${apis.delirius}download/spotifydl?url=${encodeURIComponent(url)}`;
+        const response1 = await fetch(api1);
+        const result1 = await response1.json();
+        const downloadUrl1 = result1.data.url;
+        await conn.sendMessage(m.chat, { audio: { url: downloadUrl1 }, fileName: 'audio.mp3', mimetype: 'audio/mpeg', caption: null, quoted: m });
+        
+    } catch (e1) {
+        try {
+            
+            const api2 = `${apis.delirius}download/spotifydlv3?url=${encodeURIComponent(url)}`;
+            const response2 = await fetch(api2);
+            const result2 = await response2.json();
+            const downloadUrl2 = result2.data.url;
+            await conn.sendMessage(m.chat, { audio: { url: downloadUrl2 }, fileName: 'audio.mp3', mimetype: 'audio/mpeg', caption: null, quoted: m });
+            
+        } catch (e2) {
+            try {
+                
+                const api3 = `${apis.rioo}api/spotify?url=${encodeURIComponent(url)}`;
+                const response3 = await fetch(api3);
+                const result3 = await response3.json();
+                const downloadUrl3 = result3.data.response;
+                await conn.sendMessage(m.chat, { audio: { url: downloadUrl3 }, fileName: 'audio.mp3', mimetype: 'audio/mpeg', caption: null, quoted: m });
+                
+            } catch (e3) {
+                try {
+                    const api4 = `${apis.ryzen}api/downloader/spotify?url=${encodeURIComponent(url)}`;
+                    const response4 = await fetch(api4);
+                    const result4 = await response4.json();
+                    const downloadUrl4 = result4.link;
+                    await conn.sendMessage(m.chat, { audio: { url: downloadUrl4 }, fileName: 'audio.mp3', mimetype: 'audio/mpeg', caption: null, quoted: m });
+                } catch (e4) {
+                        
+                        console.log(e);
+                        m.react('❌');
+                        m.reply(m.chat, `_*[ ❌ ] Ocurrió un error al descargar el archivo mp3, inténtalo más tarde*_`, m);
+                        
+                }
             }
         }
-        
-        if (command==='dlspotifydoc'){
-            const apiUrl = `${apis.delirius}download/spotifydl?url=${encodeURIComponent(args[0])}`;
-            const response = await fetch(apiUrl);
-            const data = await response.json();
-
-            if (data.data && data.data.url) {
-                const downloadUrl = data.data.url;
-                const filename = `${data.data.title || 'audio'}.mp3`;
-                const thumb = data.data.image;
-                await conn.sendMessage(m.chat, { document: { url: downloadUrl }, fileName: filename, mimetype: 'audio/mpeg', caption: `╭━❰  *SPOTIFY*  ❱━⬣\n${filename}\n╰━❰ *${botname}* ❱━⬣`, quoted: m })
-                //await conn.sendFile(m.chat, downloadUrl, filename, `Titulo: ${filename}`, m);
-            } else {
-                throw new Error('_*[ ❌ ] Ocurrió un error al descargar el  archivo mp3_');
-            }
-        }
-    } catch (err) {
-        console.error(err);
-        await conn.reply(m.chat, `_*[ ❌ ] Ocurrió un error al descargar el archivo mp3, inténtalo más tarde*_`, m);
     }
 };
 
-handler.command = ['spotifydl', 'dlspotifydoc'];
+handler.command = ['spotifydl', 'dlspotify', 'sfdl', 'dlsf'];
 export default handler;
