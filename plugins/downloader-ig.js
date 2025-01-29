@@ -1,4 +1,5 @@
 
+import { apis } from '../exports.js';
 import axios from 'axios';
 
 const handler = async (m, {conn, args, command, usedPrefix}) => {
@@ -6,7 +7,7 @@ const handler = async (m, {conn, args, command, usedPrefix}) => {
     
     await conn.reply(m.chat, '_*[ ⏳ ] Descargando...*_', m);
     try {
-        const responseIg = await axios.get(`https://deliriussapi-oficial.vercel.app/download/instagram?url=${args[0]}`);
+        const responseIg = await axios.get(`${apis.delirius}download/instagram?url=${args[0]}`);
         const resultlIg = responseIg.data;
 
         for (const item of resultlIg.data) {
