@@ -80,7 +80,7 @@ const handler = async (m, { conn }) => {
         }
     } catch (e) {
         console.error('Error en el manejo del comando:', e);
-        m.reply('Ocurrió un error procesando tu solicitud.');
+        m.reply(`Ocurrió un error procesando tu solicitud.\n${e.message}`);
     }
 };
 
