@@ -7,7 +7,7 @@ let handler = async (m, { conn, text }) => {
     }
 
     try {
-        const response = await fetch(`${apis.delirius}search/spotify?q=${encodeURIComponent(text)}&limit=10`);
+        const response = await fetch(`${apis.delirius}search/spotify?q=${encodeURIComponent(text)}&limit=20`);
         const data = await response.json();
 
         if (!data.status || data.data.length === 0) {
