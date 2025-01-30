@@ -10,13 +10,13 @@ try {
     if (m.mentionedJid.includes(this.user.jid) && m.isGroup && !chat.isBanned) {
         let gpt = await fetch(`${apis.ryzen}api/ai/blackbox?chat=${encodeURIComponent(text)}&options=gpt-4o`)
         let res = await gpt.json()
-        await m.reply(res.data)
+        await m.reply(res.response)
     } else {
 
         if (!m.fromMe && m.text.match(/airi/gi)) {
             let gpt = await fetch(`${apis.ryzen}api/ai/blackbox?chat=${encodeURIComponent(text)}&options=gpt-4o`)
             let res = await gpt.json()
-            await m.reply(res.data)
+            await m.reply(res.response)
         }
     }
 } catch (e){
