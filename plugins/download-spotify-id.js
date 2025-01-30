@@ -5,7 +5,9 @@ const handler = async (m, { conn }) => {
     try {
         if (m.quoted && conn.user.jid === m.quoted.sender && m.quoted.text.includes('Spotify Search')) {
 
+            let quotedText = m.quoted.text || '';
             let userInput = m.text.trim();
+            
 
             if (!/^\d+$/.test(userInput)) {
                 console.log('Texto ingresado no es un número:', userInput);
