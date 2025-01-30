@@ -8,13 +8,13 @@ let chat = global.db.data.chats[m.chat]
     
 try {
     if (m.mentionedJid.includes(this.user.jid) && m.isGroup && !chat.isBanned) {
-        let gpt = await fetch(`${apis.delirius}ia/gptweb?text=${text}`)
+        let gpt = await fetch(`${apis.delirius}ia/gptweb?text=${encodeURIComponent(text)}`)
         let res = await gpt.json()
         await m.reply(res.data)
     } else {
 
         if (!m.fromMe && m.text.match(/airi/gi)) {
-            let gpt = await fetch(`${apis.delirius}ia/gptweb?text=${text}`)
+            let gpt = await fetch(`${apis.delirius}ia/gptweb?text=${encodeURIComponent(text)}`)
             let res = await gpt.json()
             await m.reply(res.data)
         }
