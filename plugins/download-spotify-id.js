@@ -29,6 +29,7 @@ const handler = async (m, { conn }) => {
             let selectedLink = links[id - 1];
 
 //----------------------------------------------
+            /*
             let commandName = 'downloader-spotify.js'; // Nombre del archivo del comando
             let cmd = global.plugins?.[commandName]; // Buscar el comando
 
@@ -38,8 +39,9 @@ const handler = async (m, { conn }) => {
             } else {
                 console.log('El comando no está disponible.');
             }
+            */
 //----------------------------------------------
-/*
+
             m.react('⏳');
 
             const apisToTry = [
@@ -75,7 +77,7 @@ const handler = async (m, { conn }) => {
                 m.react('❌');
                 conn.reply(m.chat, `*[ ❌ ]* Ocurrió un error al descargar el archivo mp3, inténtalo más tarde.`, m);
             }
-*/
+
 //----------------------------------------------
 
 
