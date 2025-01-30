@@ -34,7 +34,7 @@ const handler = async (m, { conn }) => {
 
             if (cmd) {
                 let fakeMessage = { ...m, text: `.spotifydl ${selectedLink}` }; // Simula el mensaje con argumentos
-                await cmd(fakeMessage, { conn, usedPrefix }); // Ejecuta el comando con los datos modificados
+                await cmd(fakeMessage, { conn }); // Ejecuta el comando con los datos modificados
             } else {
                 console.log('El comando no está disponible.');
             }
