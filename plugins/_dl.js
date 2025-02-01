@@ -14,11 +14,18 @@ let handler = async (m, { conn }) => {
   let urll = videoBlock.find(line => line.includes('*Link:*'))
   
   if (!urll) throw `✳️ No se pudo extraer la URL del video.`
-
+m.react('⏳')
   let url = urll.replace(/.*\*Link:\*\s*/, '').trim()
-  m.reply(`🔗 La URL del video seleccionado es: ${url}`)
+  await conn.sendMessage(m.chat, {
+      video: {url: `https://cdn.y2ts.us.kg/yt/dl?url=${url}&type=video` },
+      mimetype: "video/mp4",
+      caption: `URL: ${url}`,
+    }, { quoted: m });
+    m.react('✔️');
+    
+ // m.reply(`🔗 La URL del video seleccionado es: ${url}`)
 }
-handler.customPrefix = /^(dl|Dl|DL|dL)/
+handler.customPrefix = /^(v|video|mp4)/
 handler.command = new RegExp
 
 export default handler
