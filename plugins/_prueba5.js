@@ -1,12 +1,13 @@
 let handler = async (m, { conn, usedPrefix, text }) => {
-    let commandName = '_prueba6.js'; // Nombre del archivo del comando
-    let cmd = global.plugins?.[commandName]; // Buscar el comando
+    let commandName = '_prueba6.js'; // Nombre del comando
+    let cmd = global.plugins?.[commandName]; // Buscar el comando en global.plugins
 
     if (!cmd) {
         return m.reply('⚠️ Error: El comando .prueba6 no está disponible.');
     }
 
-    let fakeMessage = { ...m, text: `${usedPrefix}prueba6 ${text || 'Sin texto'}` };
+    let fakeMessage = Object.create(m); // Clonar mensaje manteniendo métodos
+    fakeMessage.text = `${usedPrefix}prueba6 ${text || 'Sin texto'}`;
 
     try {
         await cmd(fakeMessage, { conn, usedPrefix });
