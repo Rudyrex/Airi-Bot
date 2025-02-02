@@ -4,18 +4,14 @@ import fetch from 'node-fetch';
 const handler = async (m, { conn }) => {
     try {
         if (m.quoted && conn.user.jid === m.quoted.sender && m.quoted.text.includes('Spotify Search')) {
-
             let quotedText = m.quoted.text || '';
             let userInput = m.text.trim();
-            
 
             if (!/^\d+$/.test(userInput)) {
-                console.log('Texto ingresado no es un número:', userInput);
                 return m.reply('⚠️ Responde con un número válido correspondiente al ID de la lista.');
             }
 
             let id = Number(userInput);
-
             let links = quotedText.match(/https?:\/\/open\.spotify\.com\/track\/[^\s]+/g);
 
             if (!links || links.length === 0) {
@@ -28,59 +24,22 @@ const handler = async (m, { conn }) => {
 
             let selectedLink = links[id - 1];
 
-//----------------------------------------------
-            /*
-            let commandName = 'downloader-spotify.js'; // Nombre del archivo del comando
-            let cmd = global.plugins?.[commandName]; // Buscar el comando
+            // ----------------- BUSCAR EL COMANDO AUTOMÁTICAMENTE -----------------
+            let cmd = Object.values(global.plugins).find(plugin => plugin.command?.includes('spotifydl'));
 
-            if (cmd) {
-                let fakeMessage = { ...m, text: `.spotifydl ${selectedLink}` }; // Simula el mensaje con argumentos
-                await cmd(fakeMessage, { conn }); // Ejecuta el comando con los datos modificados
-            } else {
-                console.log('El comando no está disponible.');
-            }
-            */
-//----------------------------------------------
-
-            m.react('⏳');
-
-            const apisToTry = [
-                `${apis.delirius}download/spotifydl?url=${encodeURIComponent(selectedLink)}`,
-                `${apis.delirius}download/spotifydlv3?url=${encodeURIComponent(selectedLink)}`,
-                `${apis.rioo}api/spotify?url=${encodeURIComponent(selectedLink)}`,
-                `${apis.ryzen}api/downloader/spotify?url=${encodeURIComponent(selectedLink)}`
-            ];
-
-            let success = false;
-            for (const api of apisToTry) {
-                try {
-                    const response = await fetch(api);
-                    const result = await response.json();
-                    const downloadUrl = result.data?.url || result.data?.response || result.link;
-
-                    if (downloadUrl) {
-                        await conn.sendMessage(m.chat, {
-                            audio: { url: downloadUrl },
-                            fileName: 'spotify_audio.mp3',
-                            mimetype: 'audio/mpeg',
-                            quoted: m
-                        });
-                        success = true;
-                        break;
-                    }
-                } catch (error) {
-                    console.log(`Error al usar la API: ${api}`, error);
-                }
+            if (!cmd) {
+                return m.reply('⚠️ Error: El comando .spotifydl no está disponible.');
             }
 
-            if (!success) {
-                m.react('❌');
-                conn.reply(m.chat, `*[ ❌ ]* Ocurrió un error al descargar el archivo mp3, inténtalo más tarde.`, m);
+            let fakeMessage = Object.create(m); // Clonar mensaje manteniendo métodos
+            fakeMessage.text = `.spotifydl ${selectedLink}`; // Prefijo fijo en lugar de usedPrefix
+
+            try {
+                await cmd(fakeMessage, { conn });
+                m.reply('✅ Se ejecutó .spotifydl correctamente.');
+            } catch (error) {
+                m.reply(`❌ Error al ejecutar .spotifydl: ${error.message}`);
             }
-
-//----------------------------------------------
-
-
         }
     } catch (e) {
         console.error('Error en el manejo del comando:', e);
@@ -92,3 +51,4 @@ handler.customPrefix = /^\d+$/;
 handler.command = new RegExp;
 
 export default handler;
+                                                                                            
