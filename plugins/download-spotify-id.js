@@ -34,19 +34,24 @@ const handler = async (m, { conn }) => {
                 return m.reply('⚠️ Error: El comando .spotifydl no está disponible.');
             }
 
-            let fakeMessage = Object.create(m); // Clonar mensaje manteniendo métodos
-            fakeMessage.text = `.spotifydl ${selectedLink}`; // Prefijo fijo en lugar de usedPrefix
+            let fakeMessage = { 
+                ...m, 
+                text: selectedLink, // Pasar solo el enlace
+                args: [selectedLink], // Pasar el enlace como argumento en args[0]
+                quoted: null 
+            };
 
             try {
                 await cmd(fakeMessage, { conn });
                 m.reply('✅ Se ejecutó .spotifydl correctamente.');
             } catch (error) {
+                console.error(error);
                 m.reply(`❌ Error al ejecutar .spotifydl: ${error.message}`);
             }
         }
     } catch (e) {
-        console.error('Error en el manejo del comando:', e);
-        m.reply(`Ocurrió un error procesando tu solicitud.\n${e.message}`);
+        console.error(e);
+        m.reply(`❌ Ocurrió un error procesando tu solicitud: ${e.message}`);
     }
 };
 
@@ -54,4 +59,4 @@ handler.customPrefix = /^\d+$/;
 handler.command = new RegExp;
 
 export default handler;
-        
+                    
