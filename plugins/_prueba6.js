@@ -5,6 +5,7 @@ let handler = async (m) => {
     try {
         m.reply(`📩 Recibí: ${mensaje}`);
     } catch (error) {
+        console.error(error);
         m.reply(`❌ Error en prueba6: ${error.message}`);
     }
 }
