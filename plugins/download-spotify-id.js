@@ -25,7 +25,10 @@ const handler = async (m, { conn }) => {
             let selectedLink = links[id - 1];
 
             // ----------------- BUSCAR EL COMANDO AUTOMÁTICAMENTE -----------------
-            let cmd = Object.values(global.plugins).find(plugin => plugin.command?.includes('spotifydl'));
+            let cmd = Object.values(global.plugins).find(plugin => {
+                let commands = Array.isArray(plugin.command) ? plugin.command : [];
+                return commands.includes('spotifydl');
+            });
 
             if (!cmd) {
                 return m.reply('⚠️ Error: El comando .spotifydl no está disponible.');
@@ -51,4 +54,4 @@ handler.customPrefix = /^\d+$/;
 handler.command = new RegExp;
 
 export default handler;
-                                                                                            
+        
