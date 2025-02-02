@@ -1,5 +1,5 @@
 let handler = async (m, { conn, usedPrefix, text }) => {
-    let commandName = 'prueba6.js'; // Nombre del archivo del comando
+    let commandName = '_prueba6.js'; // Nombre del archivo del comando
     let cmd = global.plugins?.[commandName]; // Buscar el comando
 
     if (!cmd) {
