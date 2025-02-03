@@ -1,11 +1,10 @@
-let handler = async (m) => {
-    let args = m.text.split(' ').slice(1); // Extrae los argumentos
-    let mensaje = args.length ? args.join(' ') : 'No recibí ningún texto.';
+let handler = async (m, { conn, args}) => {
+    let url = args[0]; // Extrae los argumentos
+    //let mensaje = args.length ? args.join(' ') : 'No recibí ningún texto.';
 
     try {
-        m.reply(`📩 Recibí: ${mensaje}`);
+        m.reply(`📩 Recibí: ${url}`);
     } catch (error) {
-        console.error(error);
         m.reply(`❌ Error en prueba6: ${error.message}`);
     }
 }
