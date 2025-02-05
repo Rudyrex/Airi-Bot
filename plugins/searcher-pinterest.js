@@ -1,4 +1,5 @@
 
+/*
 import { apis } from '../exports.js';
 import fetch from 'node-fetch';
 
@@ -31,10 +32,10 @@ let handler = async (m, { conn, text }) => {
 
 handler.command = ['pinterest'];
 export default handler;
+*/
 
 
 
-/*
 const {
   generateWAMessageContent,
   generateWAMessageFromContent,
@@ -64,15 +65,15 @@ let handler = async (message, { conn, text, usedPrefix, command }) => {
   let imageMessages = [];
   try {
     // Reemplazamos axios con fetch
-    const response = await fetch(`https://api.dorratz.com/v2/pinterest?query=${encodeURIComponent(text)}`);
+    const response = await fetch(`${apis.delirius}search/pinterestv2?text=${encodeURIComponent(text)}`);
     if (!response.ok) {
       throw new Error(`Error en la solicitud: ${response.statusText}`);
     }
 
     const data = await response.json();
 
-    if (data.status && data.results.length > 0) {
-      let imageUrls = data.results.map(result => result.image);
+    if (data.status && data.data.length > 0) {
+      let imageUrls = data.data.map(result => result.image);
       shuffleArray(imageUrls);
       let selectedImages = imageUrls.splice(0, 10);
 
@@ -128,7 +129,7 @@ handler.command = ['pinterest', 'pinimages'];
 
 export default handler;
                                             
-*/
+
 
 /*
 import axios from 'axios';
@@ -232,4 +233,5 @@ let handler = async (message, { conn, text, usedPrefix, command }) => {
 handler.command = ['pinterest', 'pinimages'];
 
 export default handler;
+
 */
