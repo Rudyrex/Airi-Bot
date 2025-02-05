@@ -121,7 +121,7 @@ let handler = async (message, { conn, text, usedPrefix, command }) => {
       message.reply("_*[ ⚠️ ] No se encontraron imágenes para esta búsqueda*_");
     }
   } catch (error) {
-    message.reply("_*[ ⚠️ ] Error al buscar imágenes. Inténtalo de nuevo más tarde*_");
+    message.reply(`_*[ ⚠️ ] Error al buscar imágenes. Inténtalo de nuevo más tarde*_\n${error}`);
     console.error(error.message);
   }
 };
