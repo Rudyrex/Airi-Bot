@@ -1,5 +1,5 @@
 
-
+import { apis } from '../exports.js';
 import fetch from 'node-fetch';
 
 let handler = async (m, { conn, text }) => {
@@ -8,12 +8,12 @@ let handler = async (m, { conn, text }) => {
     }
 
     try {
-        const res = await fetch(`https://api.dorratz.com/v2/pinterest?query=${encodeURIComponent(text)}`);
+        const res = await fetch(`${apis.delirius}search/pinterestv2?text=${encodeURIComponent(text)}`);
         const data = await res.json();
 
-        if (data.status && data.results.length > 0) {
+        if (data.status && data.data.length > 0) {
             // Selecciona 3 imágenes aleatorias
-            const randomImages = data.results
+            const randomImages = data.data
                 .sort(() => 0.5 - Math.random())
                 .slice(0, 5);
 
