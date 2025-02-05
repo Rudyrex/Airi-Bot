@@ -35,7 +35,8 @@ export default handler;
 */
 
 
-
+import { apis } from '../exports.js';
+import fetch from 'node-fetch';
 const {
   generateWAMessageContent,
   generateWAMessageFromContent,
