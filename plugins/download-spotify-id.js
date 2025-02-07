@@ -1,13 +1,10 @@
-import { apis } from '../exports.js';
-import fetch from 'node-fetch';
+import handlerSpotifyDL from './spotifydl.js'; // Importa el handler del primer código
 
 const handler = async (m, { conn }) => {
     try {
         if (m.quoted && conn.user.jid === m.quoted.sender && m.quoted.text.includes('Spotify Search')) {
-
             let quotedText = m.quoted.text || '';
             let userInput = m.text.trim();
-            
 
             if (!/^\d+$/.test(userInput)) {
                 console.log('Texto ingresado no es un número:', userInput);
@@ -15,7 +12,6 @@ const handler = async (m, { conn }) => {
             }
 
             let id = Number(userInput);
-
             let links = quotedText.match(/https?:\/\/open\.spotify\.com\/track\/[^\s]+/g);
 
             if (!links || links.length === 0) {
@@ -28,45 +24,8 @@ const handler = async (m, { conn }) => {
 
             let selectedLink = links[id - 1];
 
-//----------------------------------------------
-            m.react('⏳');
-
-            const apisToTry = [
-                `${apis.delirius}download/spotifydl?url=${encodeURIComponent(selectedLink)}`,
-                `${apis.delirius}download/spotifydlv3?url=${encodeURIComponent(selectedLink)}`,
-                `${apis.rioo}api/spotify?url=${encodeURIComponent(selectedLink)}`,
-                `${apis.ryzen}api/downloader/spotify?url=${encodeURIComponent(selectedLink)}`
-            ];
-
-            let success = false;
-            for (const api of apisToTry) {
-                try {
-                    const response = await fetch(api);
-                    const result = await response.json();
-                    const downloadUrl = result.data?.url || result.data?.response || result.link;
-
-                    if (downloadUrl) {
-                        await conn.sendMessage(m.chat, {
-                            audio: { url: downloadUrl },
-                            fileName: 'spotify_audio.mp3',
-                            mimetype: 'audio/mpeg',
-                            quoted: m
-                        });
-                        success = true;
-                        break;
-                    }
-                } catch (error) {
-                    console.log(`Error al usar la API: ${api}`, error);
-                }
-            }
-
-            if (!success) {
-                m.react('❌');
-                conn.reply(m.chat, `*[ ❌ ]* Ocurrió un error al descargar el archivo mp3, inténtalo más tarde.`, m);
-            }
-
-//----------------------------------------------
-
+            // Llamar al handler del comando spotifydl con el enlace seleccionado
+            return handlerSpotifyDL(m, { conn, args: [selectedLink], command: 'spotifydl' });
 
         }
     } catch (e) {
@@ -75,8 +34,9 @@ const handler = async (m, { conn }) => {
     }
 };
 
+// Configuración para detectar respuestas con números
 handler.customPrefix = /^\d+$/;
 handler.command = new RegExp;
 
 export default handler;
-            
+                      
