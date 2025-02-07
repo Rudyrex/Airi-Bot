@@ -1,4 +1,4 @@
-import handlerSpotifyDL from './spotifydl.js'; // Importa el handler del primer código
+import handlerSpotifyDL from './downloader-spotify.js'; // Importa el handler del primer código
 
 const handler = async (m, { conn }) => {
     try {
