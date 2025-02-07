@@ -29,7 +29,7 @@ let handler = async (m) => {
     const { url } = await catbox(media);
     await fs.promises.unlink(media); // Eliminar archivo local después de subir
 
-    await m.reply(`${em} *Aquí tienes la URL de tu archivo:*\n${url}`);
+    await m.reply(`${em} *Aquí está el enlace de tu archivo*\n${url}`);
   } catch (e) {
     await m.reply(`${e}`);
   }
