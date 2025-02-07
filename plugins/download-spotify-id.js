@@ -29,19 +29,6 @@ const handler = async (m, { conn }) => {
             let selectedLink = links[id - 1];
 
 //----------------------------------------------
-            /*
-            let commandName = 'downloader-spotify.js'; // Nombre del archivo del comando
-            let cmd = global.plugins?.[commandName]; // Buscar el comando
-
-            if (cmd) {
-                let fakeMessage = { ...m, text: `.spotifydl ${selectedLink}` }; // Simula el mensaje con argumentos
-                await cmd(fakeMessage, { conn }); // Ejecuta el comando con los datos modificados
-            } else {
-                console.log('El comando no está disponible.');
-            }
-            */
-//----------------------------------------------
-
             m.react('⏳');
 
             const apisToTry = [
