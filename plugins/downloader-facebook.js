@@ -6,8 +6,7 @@ let handler = async (m, { text, conn, args, usedPrefix, command }) => {
     
     if (!args[0]) return await conn.reply(m.chat, `⚠️ Agrega un enlace de *Facebook*`, m);
     let fburl = args[0]
-    m.react('⏳')
-    conn.reply(m.chat, '⏳ Descargando el video...', m);
+    m.react('🔥')
     
     try {
         let api1 = await fetch(`${apis.delirius}download/facebook?url=${fburl}`);
