@@ -4,7 +4,8 @@ export const apis = {
   siputzx: 'https://api.siputzx.my.id/api/',
   cloudseek: 'https://cloudseek-api.vercel.app/',
   ryzen: 'https://apidl.asepharyana.cloud/',
-  rioo: 'https://restapi.apibotwa.biz.id/'
+  rioo: 'https://restapi.apibotwa.biz.id/',
+  random1: 'https://api.agungny.my.id/api/
 };
 
 const iconUrls = [
