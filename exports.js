@@ -33,7 +33,10 @@ const thumbUrls = [
 
 async function loadThumbnail() {
     const response = await fetch(thumbUrls[0]);
-    const buffer = await response.buffer();
+
+  const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    //const buffer = await response.buffer();
     return buffer;
 }
 
