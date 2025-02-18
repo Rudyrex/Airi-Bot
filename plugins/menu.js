@@ -1,7 +1,7 @@
 import { thumbnail } from '../exports.js';
 
 let handler = async (m, { conn }) => {
-    let thumb = thumbnail
+    let thumb = thumbnail;
     let name = await conn.getName(m.sender)
     let menu = `
     Hola *${name}* en que puedo ayudarte hoy 😀
