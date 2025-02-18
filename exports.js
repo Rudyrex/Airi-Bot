@@ -29,6 +29,8 @@ const thumbUrls = [
     "https://raw.githubusercontent.com/Rudyrex/Airi-Bot/refs/heads/main/src/img/thumbnail5.jpg"
 ];
 
+export const thumbnail = await (await fetch(thumbUrls[0])).buffer();
+
 export const getRandomThumb = () => {
     const randomThumb = Math.floor(Math.random() * thumbUrls.length);
     return thumbUrls[randomThumb];
