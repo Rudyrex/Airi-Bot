@@ -7,7 +7,7 @@ export const apis = {
   cloudseek: 'https://cloudseek-api.vercel.app/',
   ryzen: 'https://apidl.asepharyana.cloud/',
   rioo: 'https://restapi.apibotwa.biz.id/',
-  random1: 'https://api.agungny.my.id/api/
+  random1: 'https://api.agungny.my.id/api/'
 };
 
 const iconUrls = [
