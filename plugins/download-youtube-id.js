@@ -17,7 +17,7 @@ const handler = async (m, { conn }) => {
             let id = Number(number);
 
             // Extraer enlaces de YouTube
-            let links = quotedText.match(/https?:\/\/(?:www\.)?youtube\.com\/watch\?v=[^\s]+/g);
+            let links = quotedText.match(/https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)[^\s]+/g);
             if (!links || links.length === 0) {
                 return m.reply('No se encontraron enlaces en el mensaje citado.');
             }
