@@ -1,23 +1,32 @@
-import { apis } from '../exports.js';
 import fetch from 'node-fetch';
+import { ytmp4 } from 'ruhend-scraper';
+import { toAudio } from '../lib/converter.js';
 
+let handler = async (m, { conn, args }) => {
+    if (!args[0]) return await conn.reply(m.chat, `${em} Agrega un enlace de YouTube`, m);
 
-let handler = async (m, { text, conn, args, usedPrefix, command }) => {
-    
-    if (!args[0]) return await conn.reply(m.chat, `${em} Agrega un enlace de Youtube`, m);
-    let yturl = args[0]
-    m.react('⏳')
+    let yturl = args[0];
+    m.react('⏳');
     
     try {
-        let api1 = await fetch(`${apis.random1}youtube-audio?url=${yturl}`)    
-        let result1 = await api1.json()
-        let downloadUrl1 = result1.result.downloadUrl;
+        const data = await ytmp4(yturl);
+        if (data && data.title && data.video) {
+            let { title, video } = data;
+
+            let res = await fetch(video);
+            let buffer = await res.buffer();
+
+            let audio = await toAudio(buffer, 'mp4');
+
+            await m.react('✅');
+            await conn.sendFile(m.chat, audio.data, `${title}.mp3`, `🎵 *${title}*`, m, null, { mimetype: 'audio/mp4' });
+        }
+    } catch (e) {
+        await m.react('❌');
         
-        await conn.sendMessage(m.chat, {document: {url: downloadUrl1}, caption: null, mimetype: 'audio/mpeg', fileName: `audio.mp3`}, {quoted: m});
-    } catch (e1) {
-        m.react('❌')
     }
 };
 
-handler.command = ['yta', 'ytmp3', 'ytadoc'];
+handler.command = ['yta', 'ytmp3'];
 export default handler;
+            
