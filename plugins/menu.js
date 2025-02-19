@@ -1,7 +1,9 @@
 import { thumbnail } from '../exports.js';
+import fetch from 'node-fetch';
 
 let handler = async (m, { conn }) => {
-    let thumb = thumbnail;
+    
+    let thumb = await (await fetch(thumbnail)).buffer();
     let name = await conn.getName(m.sender)
     let menu = `
     Hola *${name}* en que puedo ayudarte hoy 😀
