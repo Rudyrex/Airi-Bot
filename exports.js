@@ -31,6 +31,7 @@ const thumbUrls = [
     "https://raw.githubusercontent.com/Rudyrex/Airi-Bot/refs/heads/main/src/img/thumbnail5.jpg"
 ];
 
+/*
 async function loadThumbnail() {
     const response = await fetch(thumbUrls[0]);
 
@@ -39,8 +40,9 @@ async function loadThumbnail() {
     //const buffer = await response.buffer();
     return buffer;
 }
+*/
 
-export const thumbnail = loadThumbnail();
+export const thumbnail = thumbUrls[0];
 
 export const getRandomThumb = () => {
     const randomThumb = Math.floor(Math.random() * thumbUrls.length);
