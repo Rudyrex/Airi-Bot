@@ -1,4 +1,4 @@
-import axios from 'axios';
+import fetch from 'node-fetch';
 
 let handler = async (m, { conn }) => {
     if (!m.mentionedJid[0]) return m.reply('Debes mencionar a alguien para lamer.');
@@ -19,11 +19,12 @@ let handler = async (m, { conn }) => {
     const senderName = await getUserName(conn, senderJid);
     const mentionedName = await getUserName(conn, mentionedJid);
 
-    // Obtener el GIF desde la API
+    // Obtener el GIF desde la API con fetch
     let gifUrl;
     try {
-        const response = await axios.get('https://api.waifu.pics/sfw/lick');
-        gifUrl = response.data.url;
+        const response = await fetch('https://api.waifu.pics/sfw/lick');
+        const data = await response.json();
+        gifUrl = data.url;
     } catch (error) {
         console.error('Error al obtener el GIF:', error);
         return m.reply('Ocurrió un error al obtener el GIF. Inténtalo de nuevo más tarde.');
@@ -31,13 +32,13 @@ let handler = async (m, { conn }) => {
 
     // Enviar el mensaje con el GIF y menciones internas
     await conn.sendMessage(m.chat, {
-        video: { url: gifUrl }, // WhatsApp maneja los gifs como video
+        video: { url: gifUrl }, // WhatsApp maneja los GIFs como videos
         gifPlayback: true,
-        caption: `✨ *${senderName}* lamió a *${mentionedName}* 🐾`,
+        caption: `👅 *${senderName}* lamió a *${mentionedName}* 🤤`,
         mentions: [senderJid, mentionedJid] // Mención interna sin @ visible
     }, { quoted: m });
 };
 
 handler.command = ['lick'];
 export default handler;
-                               
+        
