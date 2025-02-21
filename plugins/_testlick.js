@@ -19,9 +19,9 @@ let handler = async (m, { conn }) => {
 
     // Arreglo con URLs de videos
     const videos = [
-        'https://example.com/video1.mp4',
-        'https://example.com/video2.mp4',
-        'https://example.com/video3.mp4'
+        'https://files.catbox.moe/8wgme9.mp4',
+        'https://files.catbox.moe/akh0e1.mp4',
+        'https://files.catbox.moe/2sletl.mp4'
     ];
     const randomVideo = videos[Math.floor(Math.random() * videos.length)];
 
