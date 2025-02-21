@@ -1,19 +1,19 @@
 let handler = async (m, { conn }) => {
     // Obtener el JID del usuario: por mención o respuesta al mensaje
-    const mentionedJid = m.mentionedJid && m.mentionedJid[0] 
-        ? m.mentionedJid[0] 
+    const mentionedJid = m.mentionedJid && m.mentionedJid[0]
+        ? m.mentionedJid[0]
         : m.quoted?.sender;
 
-    if (!mentionedJid) return m.reply('Debes mencionar a alguien o responder a su mensaje para follar');
+    if (!mentionedJid) return m.reply('Debes mencionar a alguien o responder a su mensaje para follar.');
 
     const senderJid = m.sender;
 
-    // Función para obtener el nombre del usuario
+    // Función mejorada para obtener el nombre del usuario
     async function getUserName(conn, jid) {
         let name = await conn.getName(jid);
         if (!name) {
-            const contact = await conn.fetchContact(jid);
-            name = contact?.notify || contact?.name || jid.split('@')[0];
+            const userInfo = await conn.onWhatsApp(jid);
+            name = userInfo[0]?.pushName || jid.split('@')[0];
         }
         return name;
     }
@@ -32,7 +32,7 @@ let handler = async (m, { conn }) => {
     // Enviar el mensaje con el video
     await conn.sendMessage(m.chat, {
         video: { url: randomVideo },
-        caption: `🥵 *${senderName}* se folló a *${mentionedName}* 💦`,
+        caption: `✨ *${senderName}* se folló a *${mentionedName}* 🐾`,
         gifPlayback: true, // Reproducción automática si es un gif animado
         mentions: [senderJid, mentionedJid]
     }, { quoted: m });
@@ -40,4 +40,4 @@ let handler = async (m, { conn }) => {
 
 handler.command = ['fuck'];
 export default handler;
-    
+        
