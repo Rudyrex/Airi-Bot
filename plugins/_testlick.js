@@ -1,7 +1,5 @@
-import fs from 'fs';
-
 let handler = async (m, { conn }) => {
-    if (!m.mentionedJid[0]) return m.reply('Debes mencionar a alguien para lamer');
+    if (!m.mentionedJid[0]) return m.reply('Debes mencionar a alguien para follar');
 
     const senderJid = m.sender;
     const mentionedJid = m.mentionedJid[0];
@@ -19,20 +17,23 @@ let handler = async (m, { conn }) => {
     const senderName = await getUserName(conn, senderJid);
     const mentionedName = await getUserName(conn, mentionedJid);
 
-    // Cargar el JSON y obtener un video aleatorio
-    const jsonData = JSON.parse(fs.readFileSync('../src/json/nsfw/lick.json', 'utf-8'));
-    const videos = jsonData.videos; // Cambié "images" por "videos" para mayor claridad
+    // Arreglo con URLs de videos
+    const videos = [
+        'https://example.com/video1.mp4',
+        'https://example.com/video2.mp4',
+        'https://example.com/video3.mp4'
+    ];
     const randomVideo = videos[Math.floor(Math.random() * videos.length)];
 
-    // Enviar el mensaje con el video, mostrando solo el nombre pero mencionando internamente
+    // Enviar el mensaje con el video
     await conn.sendMessage(m.chat, {
         video: { url: randomVideo },
-        caption: `✨ *${senderName}* lamió a *${mentionedName}* 🐾`,
-        gifPlayback: true, // Si es un video tipo GIF, se reproducirá automáticamente
+        caption: `🥵 *${senderName}* se folló a *${mentionedName}* 💦`,
+        gifPlayback: true, // Reproducción automática si es un gif animado
         mentions: [senderJid, mentionedJid]
     }, { quoted: m });
 };
 
-handler.command = ['lick'];
+handler.command = ['follar'];
 export default handler;
-                       
+                
