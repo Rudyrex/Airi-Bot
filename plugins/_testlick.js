@@ -1,8 +1,12 @@
 let handler = async (m, { conn }) => {
-    if (!m.mentionedJid[0]) return m.reply('Debes mencionar a alguien para follar');
+    // Obtener el JID del usuario: por mención o respuesta al mensaje
+    const mentionedJid = m.mentionedJid && m.mentionedJid[0] 
+        ? m.mentionedJid[0] 
+        : m.quoted?.sender;
+
+    if (!mentionedJid) return m.reply('Debes mencionar a alguien o responder a su mensaje para follar');
 
     const senderJid = m.sender;
-    const mentionedJid = m.mentionedJid[0];
 
     // Función para obtener el nombre del usuario
     async function getUserName(conn, jid) {
@@ -34,6 +38,6 @@ let handler = async (m, { conn }) => {
     }, { quoted: m });
 };
 
-handler.command = ['follar'];
+handler.command = ['fuck'];
 export default handler;
-                
+    
