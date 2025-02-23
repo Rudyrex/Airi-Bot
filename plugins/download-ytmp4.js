@@ -12,8 +12,9 @@ let handler = async (m, { text, conn, args, usedPrefix, command }) => {
         let api1 = await fetch(`${apis.random1}youtube-video?url=${yturl}`)    
         let result1 = await api1.json()
         let downloadUrl1 = result1.result.downloadUrl;
+        let title1 = result1.result.title
         
-        await conn.sendMessage(m.chat, {document: {url: downloadUrl1}, caption: null, mimetype: 'video/mp4', fileName: `video.mp4`}, {quoted: m});
+        await conn.sendMessage(m.chat, {document: {url: downloadUrl1}, caption: null, mimetype: 'video/mp4', fileName: `${title1}.mp4`}, {quoted: m});
     } catch (e1) {
         m.react('❌')
     }
