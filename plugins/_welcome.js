@@ -31,7 +31,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
   if (chat.bienvenida && m.messageStubType == 27) {
     let welcome = chat.sWelcome
       ? chat.sWelcome.replace('@user', userName)
-      : `${top}_🥳 ${userName} Bienvenid@ al grupo *${groupMetadata.subject}*_${bottom}`;
+      : `${top}_🙂 Hola *${userName}* Bienvenid@ al grupo *${groupMetadata.subject}*_${bottom}`;
 
     await conn.sendAiri(m.chat, botname, botdesc, welcome, true, thumb, null, null);
   }
@@ -39,7 +39,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
   if (chat.bienvenida && m.messageStubType == 32) {
     let bye = chat.sBye
       ? chat.sBye.replace('@user', userName)
-      : `${top}_👋 ${userName} Ha abandonado el grupo_${bottom}`;
+      : `${top}_👋 *${userName}* Ha abandonado el grupo_${bottom}`;
 
     await conn.sendAiri(m.chat, botname, botdesc, bye, true, thumb, null, null);
   }
@@ -47,7 +47,7 @@ export async function before(m, { conn, participants, groupMetadata }) {
   if (chat.bienvenida && m.messageStubType == 28) {
     let kick = chat.sBye
       ? chat.sBye.replace('@user', userName)
-      : `${top}_☠️ ${userName} Fue expulsad@ del grupo_${bottom}`;
+      : `${top}_☠️ *${userName}* Fue expulsad@ del grupo_${bottom}`;
 
     await conn.sendAiri(m.chat, botname, botdesc, kick, true, thumb, null, null);
   }
