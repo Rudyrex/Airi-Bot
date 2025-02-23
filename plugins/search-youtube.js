@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 
 let handler = async (m, { conn, text }) => {
     if (!text) {
-        return m.reply('Por favor, ingresa un término de búsqueda.');
+        return m.reply('${em} *Ingresa un término de búsqueda*');
     }
 
     try {
@@ -17,13 +17,13 @@ let handler = async (m, { conn, text }) => {
 
         let message = '*YouTube Search:*\n\n';
         data.data.forEach((video, index) => {
-            message += `╭─📹──✦\n`;
+            message += `╭─${em}──✦\n`;
             message += `│⥤🆔 *ID:* ${index + 1}\n`;
-            message += `│⥤🎵 *Título:* ${video.title}\n`;
+            message += `│⥤📝 *Título:* ${video.title}\n`;
             message += `│⥤⏱️ *Duración:* ${video.duration}\n`;
             message += `│⥤👤 *Autor:* ${video.author.name}\n`;
             message += `│⥤🔗 *Link:* ${video.url}\n`;
-            message += `╰─📹──✦\n\n`;
+            message += `╰─${em}──✦\n\n`;
         });
 
         m.reply(message.trim());
