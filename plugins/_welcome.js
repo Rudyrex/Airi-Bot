@@ -1,64 +1,55 @@
-import {WAMessageStubType} from '@whiskeysockets/baileys'
-import fetch from 'node-fetch'
+import { WAMessageStubType } from '@whiskeysockets/baileys';
+import fetch from 'node-fetch';
 
-export async function before(m, {conn, participants, groupMetadata}) {
+// Función para obtener el nombre del usuario
+async function getUserName(conn, jid) {
+  let name = await conn.getName(jid);
+  if (!name) {
+    const contact = await conn.fetchContact(jid);
+    name = contact?.notify || contact?.name || jid.split('@')[0];
+  }
+  return name;
+}
+
+export async function before(m, { conn, participants, groupMetadata }) {
   if (!m.messageStubType || !m.isGroup) return !0;
-  
+
   let top = `*╭─${em}─── ⫍📢⫎ ───${em}─╮*\n`;
   let bottom = `\n*╰─${em}─── ⫍📢⫎ ───${em}─╯*`;
-  //let pp = await conn.profilePictureUrl(m.messageStubParameters[0], 'image').catch(_ => 'https://qu.ax/jYQH.jpg')
-  //let img = await (await fetch(`${pp}`)).buffer()
-  let chat = global.db.data.chats[m.chat]
-  let fkontak = {
-	"key": {
-    "participants":"0@s.whatsapp.net",
-		"remoteJid": "status@broadcast",
-		"fromMe": false,
-		"id": "Halo"
-	},
-	"message": {
-		"contactMessage": {
-			"vcard": `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
-		}
-	},
-	"participant": "0@s.whatsapp.net"
-    }
+  let chat = global.db.data.chats[m.chat];
+
+  // Obtener foto de perfil
+  let pp = await conn
+    .profilePictureUrl(m.messageStubParameters[0], 'image')
+    .catch(() => 'https://files.catbox.moe/f2lebz.jpg');
+  let thumb = await (await fetch(pp)).buffer();
+
+  // Obtener nombre del usuario
+  const userJid = m.messageStubParameters[0];
+  const userName = await getUserName(conn, userJid);
 
   if (chat.bienvenida && m.messageStubType == 27) {
-    if (chat.sWelcome) {
-      let user = `@${m.messageStubParameters[0].split`@`[0]}`
-      let welcome = chat.sWelcome.replace('@user', () => user);
-      
-      await conn.reply(m.chat, welcome, fkontak);
-    } else {
-      let welcome = `${top}_🥳 @${m.messageStubParameters[0].split`@`[0]} Bienvenid@ al grupo *${groupMetadata.subject}*_${bottom}`;
-      
-      await conn.reply(m.chat, welcome, fkontak);
-    }
+    let welcome = chat.sWelcome
+      ? chat.sWelcome.replace('@user', userName)
+      : `${top}_🥳 ${userName} Bienvenid@ al grupo *${groupMetadata.subject}*_${bottom}`;
+
+    await conn.sendAiri(m.chat, botname, botdesc, welcome, true, thumb, null, null);
   }
-  
-  if (chat.bienvenida && m.messageStubType == 28) {
-    if (chat.sBye) {
-      let user = `@${m.messageStubParameters[0].split`@`[0]}`
-      let bye = chat.sBye.replace('@user', () => user);
-      
-      await conn.reply(m.chat, bye, fkontak);
-    } else {
-      let bye = `${top}_👋 @${m.messageStubParameters[0].split`@`[0]} Ha abandonado el grupo_${bottom}`;
-      
-      await conn.reply(m.chat, bye, fkontak);
-    }
-  }
-  
+
   if (chat.bienvenida && m.messageStubType == 32) {
-    if (chat.sBye) {
-      let user = `@${m.messageStubParameters[0].split`@`[0]}`
-      let kick = chat.sBye.replace('@user', () => user);
-      
-      await conn.reply(m.chat, kick, fkontak);
-    } else {
-      let kick = `${top}_☠️ @${m.messageStubParameters[0].split`@`[0]} Fue expulsad@ del grupo_${bottom}`;
-      
-      await conn.reply(m.chat, kick, fkontak);
-    }
-}}
+    let bye = chat.sBye
+      ? chat.sBye.replace('@user', userName)
+      : `${top}_👋 ${userName} Ha abandonado el grupo_${bottom}`;
+
+    await conn.sendAiri(m.chat, botname, botdesc, bye, true, thumb, null, null);
+  }
+
+  if (chat.bienvenida && m.messageStubType == 28) {
+    let kick = chat.sBye
+      ? chat.sBye.replace('@user', userName)
+      : `${top}_☠️ ${userName} Fue expulsad@ del grupo_${bottom}`;
+
+    await conn.sendAiri(m.chat, botname, botdesc, kick, true, thumb, null, null);
+  }
+} 
+		       
