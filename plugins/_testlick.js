@@ -1,3 +1,4 @@
+
 let handler = async (m, { conn }) => {
     const mentionedJid = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted?.sender;
     
@@ -7,10 +8,16 @@ let handler = async (m, { conn }) => {
 
     // Función para obtener el nombre del usuario
     async function getUserName(conn, jid) {
-        let name = await conn.getName(jid);
+        // Intenta obtener el nombre del objeto global
+        let name = global.db.data.users[jid]?.name;
+        // Si no se encuentra, intenta usar la API de conexión
         if (!name) {
-            const contact = await conn.fetchContact(jid);
-            name = contact?.notify || contact?.name || jid.split('@')[0];
+            name = await conn.getName(jid);
+            // Si aún no se encuentra, intenta obtener desde el contacto
+            if (!name) {
+                const contact = await conn.fetchContact(jid);
+                name = contact?.notify || contact?.name || jid.split('@')[0];
+            }
         }
         return name;
     }
