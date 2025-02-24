@@ -1,8 +1,9 @@
 let handler = async (m, { conn }) => {
-    if (!m.mentionedJid[0]) return m.reply(`${em} *Debes mencionar a alguien para follar*`);
+    const mentionedJid = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted?.sender;
+    
+    if (!mentionedJid) return m.reply(`${em} *Debes mencionar o etiquetar a alguien para follar*`);
 
     const senderJid = m.sender;
-    const mentionedJid = m.mentionedJid[0];
 
     // Función para obtener el nombre del usuario
     async function getUserName(conn, jid) {
