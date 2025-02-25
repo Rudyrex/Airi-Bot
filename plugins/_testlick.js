@@ -2,7 +2,7 @@
 let handler = async (m, { conn }) => {
     let chat = global.db.data.chats[m.chat]
     
-    if (!chat.nsfw) {
+    if (chat.nsfw) {
     
     const mentionedJid = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted?.sender;
     
