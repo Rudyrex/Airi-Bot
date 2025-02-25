@@ -1,5 +1,9 @@
 
 let handler = async (m, { conn }) => {
+    let chat = global.db.data.chats[m.chat]
+    
+    if (!chat.nsfw) {
+    
     const mentionedJid = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.quoted?.sender;
     
     if (!mentionedJid) return m.reply(`${em} *Debes mencionar o etiquetar a alguien para follar*`);
@@ -40,7 +44,11 @@ let handler = async (m, { conn }) => {
         gifPlayback: true, // Reproducción automática si es un gif animado
         mentions: [senderJid, mentionedJid]
     }, { quoted: m });
+    } else {
+        m.reply(`${em} *Los comandos +18 estan desactivados*`);
+    }
 };
 
 handler.command = ['fuck', 'follar'];
 export default handler;
+    
