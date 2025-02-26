@@ -1,4 +1,4 @@
-/*
+
 import fs from 'fs';
 import path from 'path';
 
@@ -36,9 +36,9 @@ handler.command = ['delsesion'];
 handler.rowner = false;
 
 export default handler;
-*/
 
 
+/*
 let handler  = async (m, { conn }) => {
 if (global.conn.user.jid == conn.user.jid) conn.reply(m.chat, `🚩 El Bot Principal No Se Puede Apagar`, m, rcanal, )
 else {
@@ -48,4 +48,4 @@ conn.ws.close()
 
 handler.command = ['stop', 'byebot'];
 export default handler
-
+*/
