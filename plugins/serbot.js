@@ -23,7 +23,7 @@ if (!(global.conns instanceof Array)) global.conns = [];
 let handler = async (m, { conn: _conn, args, usedPrefix, command, isOwner }) => {
   let parent = args[0] && args[0] == 'plz' ? _conn : await global.conn;
   if (!((args[0] && args[0] == 'plz') || (await global.conn).user.jid == _conn.user.jid)) {
-    return m.reply(`Este comando solo puede ser usado en el bot principal! wa.me/${global.conn.user.jid.split('@')[0]}?text=${usedPrefix}code`);
+    return m.reply(`${em} *Este comando solo puede ser usado en el bot principal*`);
   }
   
 
@@ -35,10 +35,10 @@ let handler = async (m, { conn: _conn, args, usedPrefix, command, isOwner }) => 
     const activos = users.map((v) => v.user.jid);
     const SUBBOTS_LIMIT = 2;
 if (activos.length >= SUBBOTS_LIMIT) {
-    return m.reply('🌱 ¡Se ha alcanzado el límite de subbots permitidos. Inténtalo nuevamente cuando se desocupe algún lugar, o dile al creador que aumente el límite!');
+    return m.reply(`${em} *¡Se ha alcanzado el límite de subbots permitidos*`);
 }
     if (activos.includes(m.sender)) {
-      return m.reply('¡Ya estás activo en el sistema!');
+      return m.reply(`${em} ¡Ya estás conectado!`);
     }
 
     if (!fs.existsSync("./Sesion Subbots/" + authFolderB)) {
@@ -136,7 +136,7 @@ if (activos.length >= SUBBOTS_LIMIT) {
         conn.uptime = new Date();
         conn.typec = '8 Dígitos';
         global.conns.push(conn);
-        await parent.reply(m.chat, args[0] ? 'Conectado con éxito' : 'Conectado exitosamente con Sylphiette! 🚀', m);
+        await parent.reply(m.chat, args[0] ? '*Conectado con éxito* 🚀' : '*Conectado correctamente* 🚀', m);
         if (args[0]) return;
 
         await parent.reply(conn.user.jid, `La siguiente vez que se conecte envía el mismo comando para resetear la conexión. Recuerda no borrar tu sesión.`, m);
