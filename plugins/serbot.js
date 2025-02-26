@@ -66,6 +66,7 @@ const COUNTRY_CODES = [
     '+507', // Panamá
     '+591', // Bolivia
     '+595', // Paraguay
+    '+503', // El Salvador
     '+598'  // Uruguay
 ];
 
