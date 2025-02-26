@@ -94,8 +94,8 @@ if (methodCode && !conn.authState.creds.registered) {
             txt += `│  ✩  *3* : Selecciona *Vincular con el número de teléfono*\n` 
             txt += `└  ✩  *4* : Escriba el Codigo\n\n`
             txt += `*Nota:* Este Código solo funciona en el número que lo solicito`
-         await parent.reply(m.chat, txt, m, rcanal)
-         await parent.reply(m.chat, codeBot, m, rcanal)
+         await parent.reply(m.chat, txt, m)
+         await parent.reply(m.chat, codeBot, m)
         rl.close()
     }, 3000)
 }
@@ -124,11 +124,11 @@ async function connectionUpdate(update) {
     if (connection == 'open') {
     conn.isInit = true
     global.conns.push(conn)
-    await parent.reply(m.chat, args[0] ? 'Conectado con exito' : 'Conectado exitosamente con WhatsApp\n\n*Nota:* Esto es temporal\nSi el Bot principal se reinicia o se desactiva, todos los sub bots tambien lo haran\n\nEl número del bot puede cambiar, guarda este enlace:\n*-* https://whatsapp.com/channel/0029VaBfsIwGk1FyaqFcK91S', m, rcanal)
+    await parent.reply(m.chat, args[0] ? 'Conectado con exito' : 'Conectado exitosamente con WhatsApp\n\n*Nota:* Esto es temporal\nSi el Bot principal se reinicia o se desactiva, todos los sub bots tambien lo haran\n\nEl número del bot puede cambiar, guarda este enlace:\n*-* https://whatsapp.com/channel/0029VaBfsIwGk1FyaqFcK91S', m)
     await sleep(5000)
     if (args[0]) return
     
-		await parent.reply(conn.user.jid, `La siguiente vez que se conecte envía el siguiente mensaje para iniciar sesión sin utilizar otro código `, m, rcanal)
+		await parent.reply(conn.user.jid, `La siguiente vez que se conecte envía el siguiente mensaje para iniciar sesión sin utilizar otro código `, m)
 		
 		await parent.sendMessage(conn.user.jid, {text : usedPrefix + command + " " + Buffer.from(fs.readFileSync("./serbot/" + authFolderB + "/creds.json"), "utf-8").toString("base64")}, { quoted: m })
 	  }
@@ -181,13 +181,13 @@ creloadHandler(false)
 serbot()
 
 }
-handler.help = ['code']
-handler.tags = ['serbot']
-handler.command = ['codebotsisked', 'codebotraro']
-handler.rowner = false
+
+handler.command = ['codebot', 'code', 'subbot']
+
 
 export default handler
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+	
