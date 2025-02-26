@@ -22,52 +22,19 @@ if (!(global.conns instanceof Array)) global.conns = [];
 
 // ✅ Lista personalizada de códigos para América y Europa
 const COUNTRY_CODES = [
-    '+1',   // EE. UU. y Canadá
-    '+7',   // Rusia
-    '+20',  // Egipto
-    '+30',  // Grecia
-    '+31',  // Países Bajos
-    '+32',  // Bélgica
-    '+33',  // Francia
-    '+34',  // España
-    '+36',  // Hungría
-    '+39',  // Italia
-    '+40',  // Rumanía
-    '+41',  // Suiza
-    '+43',  // Austria
-    '+44',  // Reino Unido
-    '+45',  // Dinamarca
-    '+46',  // Suecia
-    '+47',  // Noruega
-    '+48',  // Polonia
-    '+49',  // Alemania
-    '+52',  // México
-    '+53',  // Cuba
-    '+54',  // Argentina
-    '+55',  // Brasil
-    '+56',  // Chile
-    '+57',  // Colombia
-    '+58',  // Venezuela
-    '+60',  // Malasia
-    '+90',  // Turquía
-    '+351', // Portugal
-    '+372', // Estonia
-    '+373', // Moldavia
-    '+374', // Armenia
-    '+375', // Bielorrusia
-    '+380', // Ucrania
-    '+381', // Serbia
-    '+382', // Montenegro
-    '+385', // Croacia
-    '+386', // Eslovenia
-    '+387', // Bosnia y Herzegovina
-    '+420', // República Checa
-    '+421', // Eslovaquia
-    '+507', // Panamá
-    '+591', // Bolivia
-    '+595', // Paraguay
-    '+503', // El Salvador
-    '+598'  // Uruguay
+    '1',   // EE. UU. y Canadá
+    '7',   // Rusia
+    '20',  // Egipto
+    '30',  // Grecia
+    '31',  // Países Bajos
+    '32',  // Bélgica
+    '33',  // Francia
+    '34',  // España
+    '52',  // México
+    '53',  // Cuba
+    '54',  // Argentina
+    '503', // El Salvador
+    '598'  // Uruguay
 ];
 
 // ✅ Función para limpiar, corregir y verificar el número
