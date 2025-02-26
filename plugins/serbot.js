@@ -91,7 +91,7 @@ if (activos.length >= SUBBOTS_LIMIT) {
       setTimeout(async () => {
         let codeBot = await conn.requestPairingCode(cleanedNumber);
         codeBot = codeBot?.match(/.{1,4}/g)?.join("-") || codeBot;
-        let txt = ` \`\`\`- ${botName} -\`\`\`
+        let txt = ` \`\`\`- ${botname} -\`\`\`
         *\`[ 🚀 ] Ingresa el siguiente código para convertirse en subbot\`*
         > Nota: Solo funciona en el número dónde se ejecutó el comando; ${m.sender.split('@')[0]}
         `;
