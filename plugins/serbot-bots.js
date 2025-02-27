@@ -41,7 +41,7 @@ function dhms(ms) {
  
 _*\`Developed by I'm Fz ~\`*_`.trim();
 
-  await conn.sendMessage(m.chat, { image: { url: 'https://i.ibb.co/980qV7F/Sylph.jpg' }, caption: responseMessage, mentions: conn.parseMention(responseMessage)}, {quoted: m});
+  await conn.sendMessage(m.chat, { image: { url: 'https://files.catbox.moe/tvsfth.jpg' }, caption: responseMessage, mentions: conn.parseMention(responseMessage)}, {quoted: m});
 }
 handler.help = ['botlist']
 handler.tags = ['bebot']
