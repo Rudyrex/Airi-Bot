@@ -13,9 +13,12 @@ let handler = async (m, { conn }) => {
     return m.reply(`🕜 Espera *${tiempoRestante}* para volver a pescar.`);
   }
 
+  // Activar el cooldown antes de evaluar si atrapa algo
+  user.fishingCooldown = Date.now();
+
   // Verificar si ya tiene el máximo de Magikarps
   if (user.peces.length >= 3) {
-    return m.reply("❌ Ya tienes el máximo de 3 Magikarps. Suéltalos antes de pescar más.");
+    return m.reply("❌ Ya tienes el máximo de 3 Magikarps.");
   }
 
   // Determinar si atrapa un Magikarp (50% de probabilidad)
@@ -31,7 +34,6 @@ let handler = async (m, { conn }) => {
   };
 
   user.peces.push(nuevoMagikarp);
-  user.fishingCooldown = Date.now();
 
   m.reply(`🎉 ¡Has atrapado un *Magikarp*!  
 ✨ Nivel: ${nuevoMagikarp.nivel}  
@@ -48,4 +50,4 @@ function segundosAHMS(segundos) {
   const minutos = Math.floor(segundos / 60);
   const segundosRestantes = Math.floor(segundos % 60);
   return `${minutos} minutos y ${segundosRestantes} segundos`;
-           }
+}
