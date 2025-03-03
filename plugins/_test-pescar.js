@@ -26,8 +26,8 @@ let handler = async (m, { conn }) => {
   // Crear un nuevo Magikarp
   let nuevoMagikarp = {
     nombre: "Magikarp",
-    nivel: Math.floor(Math.random() * 10) + 1, // Nivel entre 1 y 10
-    kp: Math.floor(Math.random() * 100) + 10 // KP entre 10 y 110
+    nivel: 1, // Siempre inicia en nivel 1
+    kp: Math.floor(Math.random() * 151) + 50 // KP entre 50 y 200
   };
 
   user.peces.push(nuevoMagikarp);
@@ -42,11 +42,10 @@ let handler = async (m, { conn }) => {
 handler.help = ['pescar'];
 handler.tags = ['rpg'];
 handler.command = ['pescar'];
-handler.register = true;
 export default handler;
 
 function segundosAHMS(segundos) {
   const minutos = Math.floor(segundos / 60);
   const segundosRestantes = Math.floor(segundos % 60);
   return `${minutos} minutos y ${segundosRestantes} segundos`;
-}
+           }
