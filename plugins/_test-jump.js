@@ -1,5 +1,5 @@
 let handler = async (m, { conn }) => {
-    m.reply(`🐟`);
+    m.react('🐟');
 }
 
 // Detecta varias expresiones sin prefijo
