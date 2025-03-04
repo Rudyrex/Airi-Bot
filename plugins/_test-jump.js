@@ -4,6 +4,6 @@ let handler = async (m, { conn }) => {
 
 // Detecta varias expresiones sin prefijo
 handler.customPrefix = /^(Magikarp jump|Duelo|🐟)$/i;
-handler.command = true;
+handler.command = false;
 
 export default handler;
