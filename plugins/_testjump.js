@@ -1,7 +1,6 @@
 let handler = async (m, { conn }) => {
     if (m.fromMe) return; // Evita que el bot se responda a sí mismo
-
-    m.react('🐟'); // Reacciona con el emoji de pez
+    
 
     let user = m.sender; // Obtiene el ID del usuario que envió el mensaje
     let tag = `@${user.replace(/@.+/, '')}`; // Formatea el ID para etiquetar en el mensaje
