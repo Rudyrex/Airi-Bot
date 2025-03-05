@@ -61,9 +61,9 @@ let handler = async (m, { conn }) => {
         if (saltoGanador > 10 && saltoPerdedor > 10) {
             // Ambos saltaron más de 10m, Pidgeotto se lleva uno al azar
             pidgeottoSeLleva = Math.random() < 0.5 ? ganador : perdedor;
-        } else if (saltoGanador > 10 && Math.random() < 0.8) {
+        } else if (saltoGanador > 10 && Math.random() < 0.9) {
             pidgeottoSeLleva = ganador;
-        } else if (saltoPerdedor > 10 && Math.random() < 0.8) {
+        } else if (saltoPerdedor > 10 && Math.random() < 0.9) {
             pidgeottoSeLleva = perdedor;
         }
 
