@@ -1,33 +1,29 @@
 let handler = async (m, { conn }) => {
-    // Verifica si el mensaje es una respuesta al mensaje del bot con "te desafía"
     if (m.quoted && conn.user.jid === m.quoted.sender && m.quoted.text.includes('te desafía')) {
-        if (!/^aceptar$/i.test(m.text)) return; // Solo responde si el mensaje es "aceptar"
+        if (!/^aceptar$/i.test(m.text)) return;
 
-        let match = m.quoted.text.match(/@(\d+)/); // Extrae el número de la mención en el mensaje
-        let challenger = match ? `${match[1]}@s.whatsapp.net` : null; // Formatea el número a JID
+        let match = m.quoted.text.match(/@(\d+)/);
+        let challenger = match ? `${match[1]}@s.whatsapp.net` : null;
 
-        if (!challenger) return m.reply("No se encontró al desafiante."); 
-        if (m.sender === challenger) return m.reply("No puedes aceptar tu propio desafío."); 
+        if (!challenger) return m.reply("No se encontró al desafiante.");
+        if (m.sender === challenger) return m.reply("No puedes aceptar tu propio desafío.");
 
-        let user1 = global.db.data.users[challenger]; // Datos del desafiante
-        let user2 = global.db.data.users[m.sender]; // Datos del que acepta
+        let user1 = global.db.data.users[challenger];
+        let user2 = global.db.data.users[m.sender];
 
         if (!user2.peces || user2.peces.length === 0) {
             return m.reply("No tienes Magikarps para competir en el duelo.");
         }
 
-        // Seleccionar un Magikarp aleatorio de cada usuario
         let magikarp1 = user1.peces[Math.floor(Math.random() * user1.peces.length)];
         let magikarp2 = user2.peces[Math.floor(Math.random() * user2.peces.length)];
 
         let kp1 = magikarp1.kp;
         let kp2 = magikarp2.kp;
 
-        // Calcular probabilidades de victoria
         let probabilidad1 = (kp1 / (kp1 + kp2)) * 100;
         let probabilidad2 = 100 - probabilidad1;
 
-        // Generar número aleatorio para decidir el ganador
         let numeroAzar = Math.random() * 100;
         let ganador, perdedor, saltoGanador, saltoPerdedor;
 
@@ -39,19 +35,17 @@ let handler = async (m, { conn }) => {
             perdedor = { usuario: challenger, magikarp: magikarp1 };
         }
 
-        // Cálculo de saltos
-        saltoPerdedor = perdedor.magikarp.kp / 100; // Altura normal del perdedor
-        let diferenciaSalto = (Math.random() * (0.25 - 0.01) + 0.01).toFixed(2); // Diferencia entre 0.01m y 0.25m
-        saltoGanador = (saltoPerdedor + parseFloat(diferenciaSalto)).toFixed(2); // Asegurar que el ganador siempre salta más
+        // Cálculo de saltos (1 KP = 3.5 cm = 0.035 m)
+        saltoPerdedor = (perdedor.magikarp.kp * 0.035).toFixed(2);
+        let diferenciaSalto = (Math.random() * (0.25 - 0.01) + 0.01).toFixed(2);
+        saltoGanador = (parseFloat(saltoPerdedor) + parseFloat(diferenciaSalto)).toFixed(2);
 
-        // Asignación de recompensas
         let recompensaGanador = Math.floor(Math.random() * (30 - 15 + 1)) + 15;
         let recompensaPerdedor = Math.floor(Math.random() * (15 - 5 + 1)) + 5;
 
         ganador.magikarp.kp += recompensaGanador;
         perdedor.magikarp.kp += recompensaPerdedor;
 
-        // Sumar puntos de duelo solo al ganador
         if (!global.db.data.users[ganador.usuario].puntosDuelo) {
             global.db.data.users[ganador.usuario].puntosDuelo = 0;
         }
@@ -62,7 +56,36 @@ let handler = async (m, { conn }) => {
         let tagGanador = `@${ganador.usuario.replace(/@.+/, '')}`;
         let tagPerdedor = `@${perdedor.usuario.replace(/@.+/, '')}`;
 
-        // Mensaje del resultado
+        // Verificar si algún Magikarp salta más de 10m
+        let pidgeottoSeLleva = null;
+        if (saltoGanador > 10 && saltoPerdedor > 10) {
+            // Ambos saltaron más de 10m, Pidgeotto se lleva uno al azar
+            pidgeottoSeLleva = Math.random() < 0.5 ? ganador : perdedor;
+        } else if (saltoGanador > 10 && Math.random() < 0.8) {
+            pidgeottoSeLleva = ganador;
+        } else if (saltoPerdedor > 10 && Math.random() < 0.8) {
+            pidgeottoSeLleva = perdedor;
+        }
+
+        if (pidgeottoSeLleva) {
+            let tagPidgeotto = `@${pidgeottoSeLleva.usuario.replace(/@.+/, '')}`;
+            let otroJugador = pidgeottoSeLleva.usuario === ganador.usuario ? perdedor : ganador;
+            let mensajePidgeotto = `
+😱 *Oh no, un Pidgeotto salvaje apareció y se llevó el Magikarp de ${tagPidgeotto}!*
+
+🐟 *Magikarp (${pidgeottoSeLleva.magikarp.kp} KP)* de ${tagPidgeotto} ha saltado *${pidgeottoSeLleva === ganador ? saltoGanador : saltoPerdedor}m*.
+
+🐠 *Magikarp (${otroJugador.magikarp.kp} KP)* de ${tagGanador} ha saltado *${saltoPerdedor}m* y recibe *${recompensaGanador} KP* y *1 punto de duelo*.
+
+🏆 ${tagGanador} ha ganado automáticamente! 🎊
+`;
+            // Eliminar al Magikarp que fue atrapado
+            global.db.data.users[pidgeottoSeLleva.usuario].peces = global.db.data.users[pidgeottoSeLleva.usuario].peces.filter(p => p !== pidgeottoSeLleva.magikarp);
+
+            return conn.reply(m.chat, mensajePidgeotto, m, { mentions: [challenger, m.sender] });
+        }
+
+        // Mensaje normal si no aparece Pidgeotto
         let mensaje = `
 🎏 *Comienza el duelo de ${tag1} contra ${tag2}!* 🎏
 
@@ -82,4 +105,3 @@ handler.customPrefix = /^aceptar$/i;
 handler.command = new RegExp;
 
 export default handler;
-                                               
