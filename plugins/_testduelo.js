@@ -1,107 +1,85 @@
 let handler = async (m, { conn }) => {
+    // Verifica si el mensaje es una respuesta al mensaje del bot con "te desafía"
     if (m.quoted && conn.user.jid === m.quoted.sender && m.quoted.text.includes('te desafía')) {
         if (!/^aceptar$/i.test(m.text)) return; // Solo responde si el mensaje es "aceptar"
 
-        let match = m.quoted.text.match(/@(\d+)/);
-        let challenger = match ? `${match[1]}@s.whatsapp.net` : null;
+        let match = m.quoted.text.match(/@(\d+)/); // Extrae el número de la mención en el mensaje
+        let challenger = match ? `${match[1]}@s.whatsapp.net` : null; // Formatea el número a JID
 
-        if (!challenger) return m.reply("No se encontró al desafiante.");
+        if (!challenger) return m.reply("No se encontró al desafiante."); 
+        if (m.sender === challenger) return m.reply("No puedes aceptar tu propio desafío."); 
 
-        let user = m.sender;
+        let user1 = global.db.data.users[challenger]; // Datos del desafiante
+        let user2 = global.db.data.users[m.sender]; // Datos del que acepta
 
-        // Verificar que el usuario que acepta no sea el mismo que desafió
-        if (user === challenger) {
-            return m.reply("❌ No puedes aceptar tu propio desafío.");
+        if (!user2.peces || user2.peces.length === 0) {
+            return m.reply("No tienes Magikarps para competir en el duelo.");
         }
 
-        let userData = global.db.data.users[user];
-        let challengerData = global.db.data.users[challenger];
+        // Seleccionar un Magikarp aleatorio de cada usuario
+        let magikarp1 = user1.peces[Math.floor(Math.random() * user1.peces.length)];
+        let magikarp2 = user2.peces[Math.floor(Math.random() * user2.peces.length)];
 
-        // Verificar si el usuario que acepta tiene Magikarps
-        if (!userData.peces || userData.peces.length === 0) {
-            return m.reply("❌ No tienes ningún Magikarp para participar en el duelo.");
-        }
+        let kp1 = magikarp1.kp;
+        let kp2 = magikarp2.kp;
 
-        // Seleccionar Magikarps aleatorios de cada usuario
-        let magikarp1 = challengerData.peces[Math.floor(Math.random() * challengerData.peces.length)];
-        let magikarp2 = userData.peces[Math.floor(Math.random() * userData.peces.length)];
+        // Calcular probabilidades de victoria
+        let probabilidad1 = (kp1 / (kp1 + kp2)) * 100;
+        let probabilidad2 = 100 - probabilidad1;
 
-        // Calcular altura del salto en metros (1 KP = 1 cm)
-        let salto1 = magikarp1.kp / 100;
-        let salto2 = magikarp2.kp / 100;
-        let diferencia = Math.abs(salto1 - salto2).toFixed(2);
+        // Generar número aleatorio para decidir el ganador
+        let numeroAzar = Math.random() * 100;
+        let ganador, perdedor, saltoGanador, saltoPerdedor;
 
-        // Asignar identificadores numéricos para los jugadores
-        let jugador1 = `@${challenger.replace(/@.+/, '')}`;
-        let jugador2 = `@${user.replace(/@.+/, '')}`;
-
-        let resultadoMensaje;
-        let gananciaEmpate = Math.floor(Math.random() * 6) + 5; // 5-10 KP para ambos en caso de empate
-
-        // Manejo del resultado del duelo
-        if (magikarp1.kp > magikarp2.kp) {
-            // Gana el desafiante
-            let gananciaGanador = Math.floor(Math.random() * 16) + 15; // 15-30 KP
-            let gananciaPerdedor = Math.floor(Math.random() * 11) + 5; // 5-15 KP
-
-            // Sumar puntos
-            challengerData.puntosDuelo = (challengerData.puntosDuelo || 0) + 1;
-            magikarp1.kp += gananciaGanador;
-            magikarp2.kp += gananciaPerdedor;
-
-            resultadoMensaje = `🎏 *Comienza el duelo de ${jugador1} contra ${jugador2}!* 🎏
-
-🐟 *Magikarp (${magikarp1.kp - gananciaGanador} KP)* de ${jugador1} ha saltado *${salto1.toFixed(2)}m* y recibe *${gananciaGanador} KP* y *1 punto de duelo*.
-
-🐠 *Magikarp (${magikarp2.kp - gananciaPerdedor} KP)* de ${jugador2} ha saltado *${salto2.toFixed(2)}m* y recibe *${gananciaPerdedor} KP*.
-
-🏆 *${jugador1} ha ganado por ${diferencia}m!* 🎊`;
-        } else if (magikarp1.kp < magikarp2.kp) {
-            // Gana el que aceptó el reto
-            let gananciaGanador = Math.floor(Math.random() * 16) + 15; // 15-30 KP
-            let gananciaPerdedor = Math.floor(Math.random() * 11) + 5; // 5-15 KP
-
-            // Sumar puntos
-            userData.puntosDuelo = (userData.puntosDuelo || 0) + 1;
-            magikarp2.kp += gananciaGanador;
-            magikarp1.kp += gananciaPerdedor;
-
-            resultadoMensaje = `🎏 *Comienza el duelo de ${jugador1} contra ${jugador2}!* 🎏
-
-🐟 *Magikarp (${magikarp1.kp - gananciaPerdedor} KP)* de ${jugador1} ha saltado *${salto1.toFixed(2)}m* y recibe *${gananciaPerdedor} KP*.
-
-🐠 *Magikarp (${magikarp2.kp - gananciaGanador} KP)* de ${jugador2} ha saltado *${salto2.toFixed(2)}m* y recibe *${gananciaGanador} KP* y *1 punto de duelo*.
-
-🏆 *${jugador2} ha ganado por ${diferencia}m!* 🎊`;
+        if (numeroAzar <= probabilidad1) {
+            ganador = { usuario: challenger, magikarp: magikarp1 };
+            perdedor = { usuario: m.sender, magikarp: magikarp2 };
         } else {
-            // Empate
-            magikarp1.kp += gananciaEmpate;
-            magikarp2.kp += gananciaEmpate;
-
-            resultadoMensaje = `🎏 *Comienza el duelo de ${jugador1} contra ${jugador2}!* 🎏
-
-🐟 *Magikarp (${magikarp1.kp - gananciaEmpate} KP)* de ${jugador1} ha saltado *${salto1.toFixed(2)}m* y recibe *${gananciaEmpate} KP*.
-
-🐠 *Magikarp (${magikarp2.kp - gananciaEmpate} KP)* de ${jugador2} ha saltado *${salto2.toFixed(2)}m* y recibe *${gananciaEmpate} KP*.
-
-🤝 *El duelo ha terminado en empate!* 🎏`;
+            ganador = { usuario: m.sender, magikarp: magikarp2 };
+            perdedor = { usuario: challenger, magikarp: magikarp1 };
         }
 
-        // Mensaje de aceptación del duelo
-        conn.reply(m.chat, `${jugador2} ha aceptado el desafío de ${jugador1}! 🎣`, m, {
-            mentions: [challenger, user]
-        });
+        // Cálculo de saltos
+        saltoPerdedor = perdedor.magikarp.kp / 100; // Altura normal del perdedor
+        let diferenciaSalto = (Math.random() * (0.25 - 0.01) + 0.01).toFixed(2); // Diferencia entre 0.01m y 0.25m
+        saltoGanador = (saltoPerdedor + parseFloat(diferenciaSalto)).toFixed(2); // Asegurar que el ganador siempre salta más
 
-        // Mostrar resultados del duelo con un pequeño retraso
-        setTimeout(() => {
-            conn.reply(m.chat, resultadoMensaje, m, {
-                mentions: [challenger, user]
-            });
-        }, 3000); // Retraso de 3 segundos para dramatismo
+        // Asignación de recompensas
+        let recompensaGanador = Math.floor(Math.random() * (30 - 15 + 1)) + 15;
+        let recompensaPerdedor = Math.floor(Math.random() * (15 - 5 + 1)) + 5;
+
+        ganador.magikarp.kp += recompensaGanador;
+        perdedor.magikarp.kp += recompensaPerdedor;
+
+        // Sumar puntos de duelo solo al ganador
+        if (!global.db.data.users[ganador.usuario].puntosDuelo) {
+            global.db.data.users[ganador.usuario].puntosDuelo = 0;
+        }
+        global.db.data.users[ganador.usuario].puntosDuelo += 1;
+
+        let tag1 = `@${challenger.replace(/@.+/, '')}`;
+        let tag2 = `@${m.sender.replace(/@.+/, '')}`;
+        let tagGanador = `@${ganador.usuario.replace(/@.+/, '')}`;
+        let tagPerdedor = `@${perdedor.usuario.replace(/@.+/, '')}`;
+
+        // Mensaje del resultado
+        let mensaje = `
+🎏 *Comienza el duelo de ${tag1} contra ${tag2}!* 🎏
+
+🐟 *Magikarp (${perdedor.magikarp.kp} KP)* de ${tagPerdedor} ha saltado *${saltoPerdedor}m* y recibe *${recompensaPerdedor} KP*.
+
+🐠 *Magikarp (${ganador.magikarp.kp} KP)* de ${tagGanador} ha saltado *${saltoGanador}m* y recibe *${recompensaGanador} KP* y *1 punto de duelo*.
+
+🏆 ${tagGanador} ha ganado por *${diferenciaSalto}m*! 🎊
+`;
+
+        conn.reply(m.chat, mensaje, m, { mentions: [challenger, m.sender] });
     }
-}
+};
 
+// Detecta solo la palabra "aceptar" cuando se responde al mensaje del bot
 handler.customPrefix = /^aceptar$/i;
 handler.command = new RegExp;
 
 export default handler;
+                                               
