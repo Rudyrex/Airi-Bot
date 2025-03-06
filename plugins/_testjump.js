@@ -11,8 +11,11 @@ let handler = async (m, { conn }) => {
     let cooldown = 10 * 60 * 1000; // 10 minutos en milisegundos
 
     if (user.cooldownDuelo && ahora - user.cooldownDuelo < cooldown) {
-        let tiempoRestante = ((cooldown - (ahora - user.cooldownDuelo)) / 1000).toFixed(0);
-        return m.reply(`Debes esperar ${tiempoRestante} segundos antes de desafiar nuevamente.`);
+        let tiempoRestante = cooldown - (ahora - user.cooldownDuelo);
+        let minutos = Math.floor(tiempoRestante / 60000);
+        let segundos = Math.floor((tiempoRestante % 60000) / 1000);
+
+        return m.reply(`🕜 Espera *${minutos} minutos y ${segundos} segundos* para volver a desafiar.`);
     }
 
     user.cooldownDuelo = ahora; // Guarda el tiempo actual como inicio del cooldown
@@ -27,4 +30,3 @@ handler.customPrefix = /^(Magikarp jump!|Duelo|🐟)$/i;
 handler.command = new RegExp;
 
 export default handler;
-    
