@@ -1,12 +1,5 @@
 import fetch from 'node-fetch';
 
-function segundosAHMS(segundos) {
-  const minutos = Math.floor(segundos / 60);
-  const segundosRestantes = Math.floor(segundos % 60);
-  return `${minutos} minutos y ${segundosRestantes} segundos`;
-}
-
-
 const tiempoEspera = 15 * 60 * 1000; // 15 minutos en milisegundos
 
 let handler = async (m, { conn }) => {
@@ -20,7 +13,7 @@ let handler = async (m, { conn }) => {
   // Verificar cooldown
   if (Date.now() - user.fishingCooldown < tiempoEspera) {
     const tiempoRestante = segundosAHMS((user.fishingCooldown + tiempoEspera - Date.now()) / 1000);
-    return m.reply(`${em} Espera *${tiempoRestante}* para volver a pescar`);
+    return m.reply(`🕜 Espera *${tiempoRestante}* para volver a pescar.`);
   }
 
   // Activar el cooldown antes de evaluar si atrapa algo
@@ -28,7 +21,7 @@ let handler = async (m, { conn }) => {
 
   // Verificar si ya tiene el máximo de Magikarps
   if (user.peces.length >= 3) {
-    return m.reply(`${em} Ya tienes el máximo de 3 Magikarps`);
+    return m.reply("❌ Ya tienes el máximo de 3 Magikarps.");
   }
 
   // Determinar si atrapa un Magikarp (50% de probabilidad)
@@ -47,9 +40,16 @@ let handler = async (m, { conn }) => {
   await conn.sendAiri(m.chat, botname, botdesc, `🎣 ¡Has atrapado un *Magikarp*!.
 ⚡ KP: ${nuevoMagikarp.kp}  
 🎏 Ahora tienes ${user.peces.length}/3 Magikarps.`, true, thumb, null, null);
-
+}
 
 handler.help = ['pescar'];
 handler.tags = ['rpg'];
 handler.command = ['pescar'];
 export default handler;
+
+function segundosAHMS(segundos) {
+  const minutos = Math.floor(segundos / 60);
+  const segundosRestantes = Math.floor(segundos % 60);
+  return `${minutos} minutos y ${segundosRestantes} segundos`;
+}
+  
