@@ -1,7 +1,9 @@
 let handler = async (m, { conn }) => {
+    
     if (m.quoted && conn.user.jid === m.quoted.sender && m.quoted.text.includes('te desafía')) {
         if (!/^aceptar$/i.test(m.text)) return;
 
+        const keym = m.quoted.id;
         let match = m.quoted.text.match(/@(\d+)/);
         let challenger = match ? `${match[1]}@s.whatsapp.net` : null;
 
@@ -19,10 +21,11 @@ let handler = async (m, { conn }) => {
         try {
             await conn.sendMessage(
                 m.chat,
-                { text: `🎏 *Inició un desafío entre @${challenger.replace(/@.+/, '')} y @${m.sender.replace(/@.+/, '')}!* 🎏`, edit: m.quoted.id },
+                { text: `🎏 *Inició un desafío entre @${challenger.replace(/@.+/, '')} y @${m.sender.replace(/@.+/, '')}!* 🎏`, edit: keym },
                 { mentions: [challenger, m.sender] }
             );
         } catch (error) {
+            console.log(m.quoted.text)
             console.error("No se pudo editar el mensaje:", error);
         }
 
