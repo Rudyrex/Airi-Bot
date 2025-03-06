@@ -17,7 +17,7 @@ let handler = async (m, { conn }) => {
 
         // Aplicar cooldown de 10 minutos
         let now = Date.now();
-        let cooldown = 10 * 60 * 1000;
+        let cooldown = 5 * 60 * 1000;
         if (user2.cooldownDuelo && now - user2.cooldownDuelo < cooldown) {
             let restante = Math.ceil((cooldown - (now - user2.cooldownDuelo)) / 1000);
             let minutos = Math.floor(restante / 60);
