@@ -1,5 +1,11 @@
-
 import fetch from 'node-fetch';
+
+function segundosAHMS(segundos) {
+  const minutos = Math.floor(segundos / 60);
+  const segundosRestantes = Math.floor(segundos % 60);
+  return `${minutos} minutos y ${segundosRestantes} segundos`;
+}
+
 
 const tiempoEspera = 15 * 60 * 1000; // 15 minutos en milisegundos
 
@@ -47,9 +53,3 @@ handler.help = ['pescar'];
 handler.tags = ['rpg'];
 handler.command = ['pescar'];
 export default handler;
-
-function segundosAHMS(segundos) {
-  const minutos = Math.floor(segundos / 60);
-  const segundosRestantes = Math.floor(segundos % 60);
-  return `${minutos} minutos y ${segundosRestantes} segundos`;
-}
