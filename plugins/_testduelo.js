@@ -21,7 +21,7 @@ let handler = async (m, { conn }) => {
         try {
             await conn.sendMessage(
                 m.chat,
-                { text: `🎏 *Inició un desafío entre @${challenger.replace(/@.+/, '')} y @${m.sender.replace(/@.+/, '')}!* 🎏`, edit: keym },
+                { text: `🎏 *Inició un desafío entre @${challenger.replace(/@.+/, '')} y @${m.sender.replace(/@.+/, '')}!* 🎏`, edit: m.quoted.vM.key },
                 { mentions: [challenger, m.sender] }
             );
         } catch (error) {
