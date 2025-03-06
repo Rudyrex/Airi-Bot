@@ -26,15 +26,17 @@ let handler = async (m, { conn }) => {
         }
         user2.cooldownDuelo = now;
 
-        // Editar el mensaje original para que ya no se pueda aceptar
+        let tag1 = `@${challenger.replace(/@.+/, '')}`;
+        let tag2 = `@${m.sender.replace(/@.+/, '')}`;
+
+        // Enviar mensaje de confirmación de desafío aceptado
+        conn.reply(m.chat, `${tag2} ha aceptado el desafío de ${tag1}! 🎣`, m, { mentions: [challenger, m.sender] });
+
+        // Editar el mensaje original sin tags
         try {
             await conn.sendMessage(
                 m.chat,
-                { 
-                    text: `🎏 *Inició un desafío entre @${challenger.replace(/@.+/, '')} y @${m.sender.replace(/@.+/, '')}!* 🎏`, 
-                    edit: m.quoted.vM.key
-                },
-                { mentions: [challenger, m.sender] }
+                { text: `🎏 *Inició un nuevo desafío* 🎏`, edit: m.quoted.vM.key }
             );
         } catch (error) {
             console.error("No se pudo editar el mensaje:", error);
@@ -74,28 +76,50 @@ let handler = async (m, { conn }) => {
         }
         global.db.data.users[ganador.usuario].puntosDuelo += 1;
 
-        let tag1 = `@${challenger.replace(/@.+/, '')}`;
-        let tag2 = `@${m.sender.replace(/@.+/, '')}`;
-        let tagGanador = `@${ganador.usuario.replace(/@.+/, '')}`;
-        let tagPerdedor = `@${perdedor.usuario.replace(/@.+/, '')}`;
+        let pidgeottoSeLleva = null;
+        if (saltoGanador > 10 && saltoPerdedor > 10) {
+            pidgeottoSeLleva = Math.random() < 0.5 ? ganador : perdedor;
+        } else if (saltoGanador > 10 && Math.random() < 0.9) {
+            pidgeottoSeLleva = ganador;
+        } else if (saltoPerdedor > 10 && Math.random() < 0.9) {
+            pidgeottoSeLleva = perdedor;
+        }
+
+        if (pidgeottoSeLleva) {
+            let tagPidgeotto = `@${pidgeottoSeLleva.usuario.replace(/@.+/, '')}`;
+            let otroJugador = pidgeottoSeLleva.usuario === ganador.usuario ? perdedor : ganador;
+            let mensajePidgeotto = `
+😱 *Oh no, un Pidgeotto salvaje apareció y se llevó el Magikarp de ${tagPidgeotto}!*
+
+🐟 *Magikarp (${pidgeottoSeLleva.magikarp.kp} KP)* de ${tagPidgeotto} saltó *${pidgeottoSeLleva === ganador ? saltoGanador : saltoPerdedor}m* y fue atrapado.
+
+🐠 *Magikarp (${otroJugador.magikarp.kp} KP)* de ${tag1} ha saltado *${saltoPerdedor}m* y recibe *${recompensaGanador} KP* y *1 punto de duelo*.
+
+🏆 ${tag1} ha ganado automáticamente! 🎊
+`;
+
+            // Eliminar al Magikarp atrapado
+            global.db.data.users[pidgeottoSeLleva.usuario].peces = global.db.data.users[pidgeottoSeLleva.usuario].peces.filter(p => p !== pidgeottoSeLleva.magikarp);
+
+            return conn.reply(m.chat, mensajePidgeotto, m, { mentions: [challenger, m.sender] });
+        }
 
         let mensaje = `
 🎏 *Comienza el duelo de ${tag1} contra ${tag2}!* 🎏
 
-🐟 *Magikarp (${perdedor.magikarp.kp} KP)* de ${tagPerdedor} ha saltado *${saltoPerdedor}m* y recibe *${recompensaPerdedor} KP*.
+🐟 *Magikarp (${perdedor.magikarp.kp} KP)* de ${tag2} ha saltado *${saltoPerdedor}m* y recibe *${recompensaPerdedor} KP*.
 
-🐠 *Magikarp (${ganador.magikarp.kp} KP)* de ${tagGanador} ha saltado *${saltoGanador}m* y recibe *${recompensaGanador} KP* y *1 punto de duelo*.
+🐠 *Magikarp (${ganador.magikarp.kp} KP)* de ${tag1} ha saltado *${saltoGanador}m* y recibe *${recompensaGanador} KP* y *1 punto de duelo*.
 
-🏆 ${tagGanador} ha ganado por *${diferenciaSalto}m*! 🎊
+🏆 ${tag1} ha ganado por *${diferenciaSalto}m*! 🎊
 `;
 
         conn.reply(m.chat, mensaje, m, { mentions: [challenger, m.sender] });
     }
 };
 
-// Detecta solo la palabra "aceptar" cuando se responde al mensaje del bot
 handler.customPrefix = /^aceptar$/i;
 handler.command = new RegExp;
 
 export default handler;
-            
+                 
