@@ -1,7 +1,11 @@
+
+import fetch from 'node-fetch';
+
 const tiempoEspera = 15 * 60 * 1000; // 15 minutos en milisegundos
 
 let handler = async (m, { conn }) => {
   let user = global.db.data.users[m.sender];
+  let thumb = await (await fetch('https://files.catbox.moe/7v2vb7.jpg')).buffer();
 
   // Inicializar propiedades si no existen
   if (!user.fishingCooldown) user.fishingCooldown = 0;
@@ -10,7 +14,7 @@ let handler = async (m, { conn }) => {
   // Verificar cooldown
   if (Date.now() - user.fishingCooldown < tiempoEspera) {
     const tiempoRestante = segundosAHMS((user.fishingCooldown + tiempoEspera - Date.now()) / 1000);
-    return m.reply(`🕜 Espera *${tiempoRestante}* para volver a pescar.`);
+    return m.reply(`${em} Espera *${tiempoRestante}* para volver a pescar`);
   }
 
   // Activar el cooldown antes de evaluar si atrapa algo
@@ -18,28 +22,26 @@ let handler = async (m, { conn }) => {
 
   // Verificar si ya tiene el máximo de Magikarps
   if (user.peces.length >= 3) {
-    return m.reply("❌ Ya tienes el máximo de 3 Magikarps.");
+    return m.reply(`${em} Ya tienes el máximo de 3 Magikarps`);
   }
 
   // Determinar si atrapa un Magikarp (50% de probabilidad)
   if (Math.random() < 0.5) {
-    return m.reply("🎣 Pescaste... pero no atrapaste nada. ¡Intenta de nuevo más tarde!");
+    return await conn.sendAiri(m.chat, botname, botdesc, '🎣 Pescaste... pero se te escapó.\n¡Mas suerte para la próxima!', true, thumb, null, null);
   }
 
   // Crear un nuevo Magikarp
   let nuevoMagikarp = {
     nombre: "Magikarp",
-    nivel: 1, // Siempre inicia en nivel 1
     kp: Math.floor(Math.random() * 151) + 50 // KP entre 50 y 200
   };
 
   user.peces.push(nuevoMagikarp);
-
-  m.reply(`🎉 ¡Has atrapado un *Magikarp*!  
-✨ Nivel: ${nuevoMagikarp.nivel}  
+  
+  await conn.sendAiri(m.chat, botname, botdesc, `🎣 ¡Has atrapado un *Magikarp*!.
 ⚡ KP: ${nuevoMagikarp.kp}  
-🎏 Ahora tienes ${user.peces.length}/3 Magikarps.`);
-};
+🎏 Ahora tienes ${user.peces.length}/3 Magikarps.`, true, thumb, null, null);
+
 
 handler.help = ['pescar'];
 handler.tags = ['rpg'];
