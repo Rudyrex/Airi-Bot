@@ -15,6 +15,17 @@ let handler = async (m, { conn }) => {
             return m.reply("No tienes Magikarps para competir en el duelo.");
         }
 
+        // Editar el mensaje original para que ya no se pueda aceptar
+        try {
+            await conn.sendMessage(
+                m.chat,
+                { text: `🎏 *Inició un desafío entre @${challenger.replace(/@.+/, '')} y @${m.sender.replace(/@.+/, '')}!* 🎏`, edit: m.quoted.key },
+                { mentions: [challenger, m.sender] }
+            );
+        } catch (error) {
+            console.error("No se pudo editar el mensaje:", error);
+        }
+
         let magikarp1 = user1.peces[Math.floor(Math.random() * user1.peces.length)];
         let magikarp2 = user2.peces[Math.floor(Math.random() * user2.peces.length)];
 
@@ -34,7 +45,6 @@ let handler = async (m, { conn }) => {
             perdedor = { usuario: challenger, magikarp: magikarp1 };
         }
 
-        // Cálculo de saltos (1 KP = 3.5 cm = 0.035 m)
         let saltoPerdedor = (perdedor.magikarp.kp * 0.035).toFixed(2);
         let diferenciaSalto = (Math.random() * (0.25 - 0.01) + 0.01).toFixed(2);
         let saltoGanador = (parseFloat(saltoPerdedor) + parseFloat(diferenciaSalto)).toFixed(2);
@@ -55,7 +65,6 @@ let handler = async (m, { conn }) => {
         let tagGanador = `@${ganador.usuario.replace(/@.+/, '')}`;
         let tagPerdedor = `@${perdedor.usuario.replace(/@.+/, '')}`;
 
-        // Verificar si algún Magikarp salta más de 10m
         let pidgeottoSeLleva = null;
         if (saltoGanador > 10 && saltoPerdedor > 10) {
             pidgeottoSeLleva = Math.random() < 0.5 ? ganador : perdedor;
@@ -82,7 +91,6 @@ let handler = async (m, { conn }) => {
             return conn.reply(m.chat, mensajePidgeotto, m, { mentions: [challenger, m.sender] });
         }
 
-        // Mensaje normal si no aparece Pidgeotto
         let mensaje = `
 🎏 *Comienza el duelo de ${tag1} contra ${tag2}!* 🎏
 
@@ -102,3 +110,4 @@ handler.customPrefix = /^aceptar$/i;
 handler.command = new RegExp;
 
 export default handler;
+                       
