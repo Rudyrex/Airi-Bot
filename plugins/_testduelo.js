@@ -1,9 +1,7 @@
 let handler = async (m, { conn }) => {
-    
     if (m.quoted && conn.user.jid === m.quoted.sender && m.quoted.text.includes('te desafía')) {
         if (!/^aceptar$/i.test(m.text)) return;
 
-        
         let match = m.quoted.text.match(/@(\d+)/);
         let challenger = match ? `${match[1]}@s.whatsapp.net` : null;
 
@@ -17,15 +15,28 @@ let handler = async (m, { conn }) => {
             return m.reply("No tienes Magikarps para competir en el duelo.");
         }
 
+        // Aplicar cooldown de 10 minutos
+        let now = Date.now();
+        let cooldown = 10 * 60 * 1000;
+        if (user2.cooldownDuelo && now - user2.cooldownDuelo < cooldown) {
+            let restante = Math.ceil((cooldown - (now - user2.cooldownDuelo)) / 1000);
+            let minutos = Math.floor(restante / 60);
+            let segundos = restante % 60;
+            return m.reply(`🕜 Espera *${minutos} minutos y ${segundos} segundos* para volver a aceptar un duelo.`);
+        }
+        user2.cooldownDuelo = now;
+
         // Editar el mensaje original para que ya no se pueda aceptar
         try {
             await conn.sendMessage(
                 m.chat,
-                { text: `🎏 *Inició un desafío entre @${challenger.replace(/@.+/, '')} y @${m.sender.replace(/@.+/, '')}!* 🎏`, edit: m.quoted.vM.key },
+                { 
+                    text: `🎏 *Inició un desafío entre @${challenger.replace(/@.+/, '')} y @${m.sender.replace(/@.+/, '')}!* 🎏`, 
+                    edit: m.quoted.vM.key
+                },
                 { mentions: [challenger, m.sender] }
             );
         } catch (error) {
-            console.log(m.quoted.text)
             console.error("No se pudo editar el mensaje:", error);
         }
 
@@ -68,32 +79,6 @@ let handler = async (m, { conn }) => {
         let tagGanador = `@${ganador.usuario.replace(/@.+/, '')}`;
         let tagPerdedor = `@${perdedor.usuario.replace(/@.+/, '')}`;
 
-        let pidgeottoSeLleva = null;
-        if (saltoGanador > 10 && saltoPerdedor > 10) {
-            pidgeottoSeLleva = Math.random() < 0.5 ? ganador : perdedor;
-        } else if (saltoGanador > 10 && Math.random() < 0.9) {
-            pidgeottoSeLleva = ganador;
-        } else if (saltoPerdedor > 10 && Math.random() < 0.9) {
-            pidgeottoSeLleva = perdedor;
-        }
-
-        if (pidgeottoSeLleva) {
-            let tagPidgeotto = `@${pidgeottoSeLleva.usuario.replace(/@.+/, '')}`;
-            let otroJugador = pidgeottoSeLleva.usuario === ganador.usuario ? perdedor : ganador;
-            let mensajePidgeotto = `
-😱 *Oh no, un Pidgeotto salvaje apareció y se llevó el Magikarp de ${tagPidgeotto}!*
-
-🐟 *Magikarp (${pidgeottoSeLleva.magikarp.kp} KP)* de ${tagPidgeotto} ha saltado *${pidgeottoSeLleva === ganador ? saltoGanador : saltoPerdedor}m*.
-
-🐠 *Magikarp (${otroJugador.magikarp.kp} KP)* de ${otroJugador.usuario === challenger ? tag1 : tag2} ha saltado *${pidgeottoSeLleva === ganador ? saltoPerdedor : saltoGanador}m* y recibe *${recompensaGanador} KP* y *1 punto de duelo*.
-
-🏆 ${otroJugador.usuario === challenger ? tag1 : tag2} ha ganado automáticamente! 🎊
-`;
-            global.db.data.users[pidgeottoSeLleva.usuario].peces = global.db.data.users[pidgeottoSeLleva.usuario].peces.filter(p => p !== pidgeottoSeLleva.magikarp);
-
-            return conn.reply(m.chat, mensajePidgeotto, m, { mentions: [challenger, m.sender] });
-        }
-
         let mensaje = `
 🎏 *Comienza el duelo de ${tag1} contra ${tag2}!* 🎏
 
@@ -113,4 +98,4 @@ handler.customPrefix = /^aceptar$/i;
 handler.command = new RegExp;
 
 export default handler;
-                       
+            
