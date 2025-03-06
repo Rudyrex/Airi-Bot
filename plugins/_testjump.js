@@ -8,7 +8,7 @@ let handler = async (m, { conn }) => {
     }
 
     let ahora = Date.now();
-    let cooldown = 10 * 60 * 1000; // 10 minutos en milisegundos
+    let cooldown = 5 * 60 * 1000; // 10 minutos en milisegundos
 
     if (user.cooldownDuelo && ahora - user.cooldownDuelo < cooldown) {
         let tiempoRestante = cooldown - (ahora - user.cooldownDuelo);
