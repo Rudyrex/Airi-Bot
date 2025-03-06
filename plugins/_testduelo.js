@@ -3,7 +3,7 @@ let handler = async (m, { conn }) => {
     if (m.quoted && conn.user.jid === m.quoted.sender && m.quoted.text.includes('te desafía')) {
         if (!/^aceptar$/i.test(m.text)) return;
 
-        const keym = m.quoted.id;
+        
         let match = m.quoted.text.match(/@(\d+)/);
         let challenger = match ? `${match[1]}@s.whatsapp.net` : null;
 
