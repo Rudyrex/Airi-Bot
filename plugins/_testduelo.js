@@ -15,7 +15,6 @@ let handler = async (m, { conn }) => {
             return m.reply("No tienes Magikarps para competir en el duelo.");
         }
 
-        // Aplicar cooldown de 10 minutos
         let now = Date.now();
         let cooldown = 5 * 60 * 1000;
         if (user2.cooldownDuelo && now - user2.cooldownDuelo < cooldown) {
@@ -29,10 +28,8 @@ let handler = async (m, { conn }) => {
         let tag1 = `@${challenger.replace(/@.+/, '')}`;
         let tag2 = `@${m.sender.replace(/@.+/, '')}`;
 
-        // Enviar mensaje de confirmación de desafío aceptado
         conn.reply(m.chat, `${tag2} ha aceptado el desafío de ${tag1}! 🎣`, m, { mentions: [challenger, m.sender] });
 
-        // Editar el mensaje original sin tags
         try {
             await conn.sendMessage(
                 m.chat,
@@ -51,14 +48,18 @@ let handler = async (m, { conn }) => {
         let probabilidad1 = (kp1 / (kp1 + kp2)) * 100;
         let numeroAzar = Math.random() * 100;
 
-        let ganador, perdedor;
+        let ganador, perdedor, tagGanador, tagPerdedor;
 
         if (numeroAzar <= probabilidad1) {
             ganador = { usuario: challenger, magikarp: magikarp1 };
             perdedor = { usuario: m.sender, magikarp: magikarp2 };
+            tagGanador = tag1;
+            tagPerdedor = tag2;
         } else {
             ganador = { usuario: m.sender, magikarp: magikarp2 };
             perdedor = { usuario: challenger, magikarp: magikarp1 };
+            tagGanador = tag2;
+            tagPerdedor = tag1;
         }
 
         let saltoPerdedor = (perdedor.magikarp.kp * 0.035).toFixed(2);
@@ -86,19 +87,18 @@ let handler = async (m, { conn }) => {
         }
 
         if (pidgeottoSeLleva) {
-            let tagPidgeotto = `@${pidgeottoSeLleva.usuario.replace(/@.+/, '')}`;
-            let otroJugador = pidgeottoSeLleva.usuario === ganador.usuario ? perdedor : ganador;
+            let tagPidgeotto = pidgeottoSeLleva === ganador ? tagGanador : tagPerdedor;
+            let otroJugador = pidgeottoSeLleva === ganador ? perdedor : ganador;
             let mensajePidgeotto = `
 😱 *Oh no, un Pidgeotto salvaje apareció y se llevó el Magikarp de ${tagPidgeotto}!*
 
 🐟 *Magikarp (${pidgeottoSeLleva.magikarp.kp} KP)* de ${tagPidgeotto} saltó *${pidgeottoSeLleva === ganador ? saltoGanador : saltoPerdedor}m* y fue atrapado.
 
-🐠 *Magikarp (${otroJugador.magikarp.kp} KP)* de ${tag1} ha saltado *${saltoPerdedor}m* y recibe *${recompensaGanador} KP* y *1 punto de duelo*.
+🐠 *Magikarp (${otroJugador.magikarp.kp} KP)* de ${otroJugador.usuario === challenger ? tag1 : tag2} ha saltado *${saltoPerdedor}m* y recibe *${recompensaGanador} KP* y *1 punto de duelo*.
 
-🏆 ${tag1} ha ganado automáticamente! 🎊
+🏆 ${otroJugador.usuario === challenger ? tag1 : tag2} ha ganado automáticamente! 🎊
 `;
 
-            // Eliminar al Magikarp atrapado
             global.db.data.users[pidgeottoSeLleva.usuario].peces = global.db.data.users[pidgeottoSeLleva.usuario].peces.filter(p => p !== pidgeottoSeLleva.magikarp);
 
             return conn.reply(m.chat, mensajePidgeotto, m, { mentions: [challenger, m.sender] });
@@ -107,11 +107,11 @@ let handler = async (m, { conn }) => {
         let mensaje = `
 🎏 *Comienza el duelo de ${tag1} contra ${tag2}!* 🎏
 
-🐟 *Magikarp (${perdedor.magikarp.kp} KP)* de ${tag2} ha saltado *${saltoPerdedor}m* y recibe *${recompensaPerdedor} KP*.
+🐟 *Magikarp (${perdedor.magikarp.kp} KP)* de ${tagPerdedor} ha saltado *${saltoPerdedor}m* y recibe *${recompensaPerdedor} KP*.
 
-🐠 *Magikarp (${ganador.magikarp.kp} KP)* de ${tag1} ha saltado *${saltoGanador}m* y recibe *${recompensaGanador} KP* y *1 punto de duelo*.
+🐠 *Magikarp (${ganador.magikarp.kp} KP)* de ${tagGanador} ha saltado *${saltoGanador}m* y recibe *${recompensaGanador} KP* y *1 punto de duelo*.
 
-🏆 ${tag1} ha ganado por *${diferenciaSalto}m*! 🎊
+🏆 ${tagGanador} ha ganado por *${diferenciaSalto}m*! 🎊
 `;
 
         conn.reply(m.chat, mensaje, m, { mentions: [challenger, m.sender] });
@@ -122,4 +122,4 @@ handler.customPrefix = /^aceptar$/i;
 handler.command = new RegExp;
 
 export default handler;
-                 
+        
