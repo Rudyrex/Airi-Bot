@@ -23,7 +23,7 @@ let handler = async (m, { conn }) => {
         const randomVideo = videos[Math.floor(Math.random() * videos.length)];
         const text 
         // Enviar el mensaje con el video
-        if ( mentionedJid === conn.user.jid ) {
+        if (mentionedJid.trim()===conn.user.jid.trim()) {
             await conn.sendMessage(m.chat, { video: { url: randomVideo }, caption: `🥵 *${senderName}* se folló a... omitiremos eso`, gifPlayback: true, mentions: [senderJid] }, { quoted: m });    
         } else {
             await conn.sendMessage(m.chat, { video: { url: randomVideo }, caption: `🥵 *${senderName}* se folló a *${mentionedName}*`, gifPlayback: true, mentions: [senderJid, mentionedJid] }, { quoted: m });    
