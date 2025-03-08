@@ -10,6 +10,21 @@ export const apis = {
   random1: 'https://api.agungny.my.id/api/'
 };
 
+export async function getUserName(conn, jid) {
+  // Intenta obtener el nombre del objeto global
+  let name = global.db.data.users[jid]?.name;
+  // Si no se encuentra, intenta usar la API de conexión
+      if (!name) {
+          name = await conn.getName(jid);
+          // Si aún no se encuentra, intenta obtener desde el contacto
+          if (!name) {
+                const contact = await conn.fetchContact(jid);
+                name = contact?.notify || contact?.name || jid.split('@')[0];
+          }
+      }
+      return name;
+}
+
 const iconUrls = [
     "https://raw.githubusercontent.com/Rudyrex/Airi-Bot/refs/heads/main/src/img/icon1.jpg",
     "https://raw.githubusercontent.com/Rudyrex/Airi-Bot/refs/heads/main/src/img/icon2.jpg",
