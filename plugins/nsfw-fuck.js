@@ -19,19 +19,28 @@ let handler = async (m, { conn }) => {
             'https://files.catbox.moe/akh0e1.mp4',
             'https://files.catbox.moe/2sletl.mp4'
         ];
-    
+        // Arreglo con textos
+        const texts = [
+            `🥵 *${senderName}* se folló a *${mentionedName}*`,
+            `🔥 *${senderName}* se cogió fuertemente a *${mentionedName}*`,
+            `😈 *${senderName}* se está follando a *${mentionedName}*`,
+            `👅 *${senderName}* y *${mentionedName}* están follando apasionadamente`
+        ];
+        
         const randomVideo = videos[Math.floor(Math.random() * videos.length)];
+        const randomText = texts[Math.floor(Math.random() * texts.length)];
+        
         // Enviar el mensaje con el video
-        if (mentionedJid == conn.user.jid) {
-            await conn.sendMessage(m.chat, { video: { url: randomVideo }, caption: `🥵 *${senderName}* se folló a... omitiremos eso`, gifPlayback: true, mentions: [senderJid] }, { quoted: m });    
+        if ( mentionedJid == conn.user.jid ) {
+            await conn.reply(m.chat, '🫣 Omitiremos eso', m);
         } else {
-            await conn.sendMessage(m.chat, { video: { url: randomVideo }, caption: `🥵 *${senderName}* se folló a *${mentionedName}*`, gifPlayback: true, mentions: [senderJid, mentionedJid] }, { quoted: m });    
+            await conn.sendMessage(m.chat, { video: { url: randomVideo }, caption: randomText, gifPlayback: true, mentions: [senderJid, mentionedJid] }, { quoted: m });    
         }
     } else {
         m.reply(`${em} *Los comandos +18 estan desactivados*`);
     }
 };
 
-handler.command = ['fuck', 'follar'];
+handler.command = ['follar', 'fuck'];
 handler.group = true;
 export default handler;
