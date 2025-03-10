@@ -5,7 +5,7 @@ const tiempoEspera = 15 * 60 * 1000; // 15 minutos en milisegundos
 let handler = async (m, { conn }) => {
   let user = global.db.data.users[m.sender];
   let thumb = await (await fetch('https://files.catbox.moe/7v2vb7.jpg')).buffer();
-  let tag = `@${m.sender.replace(/@.+/, '')}`;
+  
   
   // Inicializar propiedades si no existen
   if (!user.fishingCooldown) user.fishingCooldown = 0;
@@ -27,7 +27,7 @@ let handler = async (m, { conn }) => {
 
   // Determinar si atrapa un Magikarp (50% de probabilidad)
   if (Math.random() < 0.5) {
-    return await conn.sendAiri(m.chat, botname, botdesc, `🎣 ${tag} Pescaste... pero se te escapó.\n¡Mas suerte para la próxima!`, true, thumb, null, m);
+    return await conn.sendAiri(m.chat, botname, botdesc, `🎣 Pescaste... pero se te escapó.\n¡Mas suerte para la próxima!`, true, thumb, null, m);
   }
 
   // Crear un nuevo Magikarp
