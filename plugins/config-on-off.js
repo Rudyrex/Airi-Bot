@@ -12,7 +12,7 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
     modoadmin: { desc: "Comandos solo para administradores", estado: chat.modoadmin },
     detect: { desc: "Avisos dentro del grupo", estado: chat.detect },
     jadibotmd: { desc: "Modo SerBot", estado: bot.jadibotmd },
-    autoread: { desc: "Lectura automática de mensajes", estado: global.opts['autoread'] },
+    autoread: { desc: "Lectura automática de mensajes", estado: bot.autoread },
     autobiografia: { desc: "Actualización automática de biografía", estado: bot.autobio },
     antiprivado: { desc: "Bloqueo de mensajes privados", estado: bot.antiPrivate },
     antilink: { desc: "AntiLinks en el grupo", estado: chat.antiLink },
@@ -72,7 +72,7 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
         global.dfail('rowner', m, conn);
         throw false;
       }
-      global.opts['autoread'] = isEnable;
+      bot.autoread = isEnable;
       break;
       
     case 'autobiografia':
