@@ -65,11 +65,16 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
       break;
 
     case 'autoread':
+    case 'autoleer':
+    case 'autover':
       isAll = true;
-      if (!isROwner) return global.dfail('rowner', m, conn);
-      bot.autoread = isEnable;
+      if (!isROwner) {
+        global.dfail('rowner', m, conn);
+        throw false;
+      }
+      global.opts['autoread'] = isEnable;
       break;
-
+      
     case 'autobiografia':
       isAll = true;
       if (!isROwner) return global.dfail('rowner', m, conn);
