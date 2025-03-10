@@ -30,7 +30,20 @@ let handler = async (m, { conn }) => {
 
     // Mensaje de confirmación de desafío aceptado
     let thumbDesafio = await (await fetch('https://files.catbox.moe/8y8wnc.jpg')).buffer();
-    await conn.sendAiri(m.chat, botname, botdesc, `${tag2} ha aceptado el desafío de ${tag1}! 🎣`, true, thumbDesafio, null, m);
+    await conn.reply(m.chat, `${tag2} ha aceptado el desafío de ${tag1}! 🎣`, m, {
+        mentions: [challenger, m.sender],
+        contextInfo: {
+                externalAdReply: {
+                title: botname,
+                body: botdesc,
+                mediaType: 1,
+                previewType: 0,
+                renderLargerThumbnail: true,
+                thumbnail: thumbDesafio,
+                sourceUrl: null
+            }
+        }
+    });
 
     // Editar el mensaje original sin tags
     try {
@@ -44,9 +57,8 @@ let handler = async (m, { conn }) => {
 
     // Rama de Snorlax: 10% de probabilidad de que aparezca un Snorlax y se cancele el duelo
     if (Math.random() < 0.1) {
-        let thumbSnorlax = await (await fetch('https://files.catbox.moe/vdtkss.jpg')).buffer();
-        await conn.sendAiri(m.chat, botname, botdesc, `*Un Snorlax duerme en el campo de desafío!*\nVuelvan más tarde cuando se haya despertado`, true, thumbSnorlax, null, m);
-        return;
+      conn.reply(m.chat, "😴 *Oh no!* Un Snorlax está durmiendo en el campo de desafío. Vuelve más tarde cuando se despierte.", m);
+      return;
     }
 
     // Seleccionar aleatoriamente un Magikarp de cada usuario
@@ -139,8 +151,7 @@ let handler = async (m, { conn }) => {
       let otroJugador = (pidgeottoSeLleva.usuario === winner.usuario) ? loser : winner;
       let kpPidgeottoOriginal = (pidgeottoSeLleva === winner) ? originalKpWinner : originalKpLoser;
       let kpOtroOriginal = (pidgeottoSeLleva === winner) ? originalKpLoser : originalKpWinner;
-      
-      let thumbPidgeotto = await (await fetch('https://files.catbox.moe/00654k.jpg')).buffer();
+
       let mensajePidgeotto = `
 😱 *Oh no, un Pidgeotto salvaje apareció y se llevó el Magikarp de ${tagPidgeotto}!*
 
@@ -148,14 +159,13 @@ let handler = async (m, { conn }) => {
 
 🐠 *Magikarp (${kpOtroOriginal} KP)* de ${(otroJugador.usuario === challenger) ? tag1 : tag2} saltó *${pidgeottoSeLleva === winner ? jumpLoser : jumpWinner}m* y recibe *${recompensaWinner} KP* y *1 punto de duelo*.
 
-✨ ${(otroJugador.usuario === challenger) ? tag1 : tag2} ha ganado automáticamente! 🎊
+🏆 ${(otroJugador.usuario === challenger) ? tag1 : tag2} ha ganado automáticamente! 🎊
 `;
       global.db.data.users[pidgeottoSeLleva.usuario].peces = global.db.data.users[pidgeottoSeLleva.usuario].peces.filter(p => p !== pidgeottoSeLleva.magikarp);
-      return await conn.sendAiri(m.chat, botname, botdesc, mensajePidgeotto, true, thumbPidgeotto, null, m);
+      return conn.reply(m.chat, mensajePidgeotto, m, { mentions: [challenger, m.sender] });
     }
 
     // Mensaje normal del duelo (usando los KP originales)
-    let thumbJump = await (await fetch('https://files.catbox.moe/36jon9.jpg')).buffer();
     let mensaje = `
 🎏 *Comienza el duelo de ${tagWinner} contra ${tagLoser}!* 🎏
 
@@ -163,10 +173,10 @@ let handler = async (m, { conn }) => {
 
 🐠 *Magikarp (${originalKpWinner} KP)* de ${tagWinner} saltó *${jumpWinner}m* y recibe *${recompensaWinner} KP* y *1 punto de duelo*.
 
-✨ ${tagWinner} ha ganado por *${diffJump}m*! 🎊
+🏆 ${tagWinner} ha ganado por *${diffJump}m*! 🎊
 `;
 
-    await conn.sendAiri(m.chat, botname, botdesc, mensaje, true, thumbJump, null, m);
+    conn.reply(m.chat, mensaje, m, { mentions: [challenger, m.sender] });
   }
 };
 
@@ -174,4 +184,4 @@ handler.customPrefix = /^aceptar$/i;
 handler.command = new RegExp;
 
 export default handler;
-    
+  
