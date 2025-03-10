@@ -4,7 +4,7 @@ let handler = async (m, { conn }) => {
     let user = global.db.data.users[m.sender];
 
     if (!user.peces || user.peces.length === 0) {
-        return m.reply("No tienes Magikarps para entrenar o desafiar.");
+        return m.reply(`${em} *No tienes Magikarps para iniciar un desafío`);
     }
 
     let ahora = Date.now();
@@ -30,7 +30,8 @@ let handler = async (m, { conn }) => {
         magikarp.kp += recompensa;
 
         let tag = `@${m.sender.replace(/@.+/, '')}`;
-        conn.reply(m.chat, `El Magikarp (${originalKP} KP) de ${tag} decidió entrenar y ganó *${recompensa} KP*!`, m, { mentions: [m.sender] });
+        let thumbEntrenar = await (await fetch('https://files.catbox.moe/8kbwtl.jpg')).buffer();
+        await conn.sendAiri(m.chat, botname, botdesc, `El Magikarp (${originalKP} KP) de ${tag} decidió entrenar y ganó *${recompensa} KP*!`, true, thumbEntrenar, null, m);
     } else {
         // Si no entrena, se envía el mensaje de desafío
         let tag = `@${m.sender.replace(/@.+/, '')}`;
