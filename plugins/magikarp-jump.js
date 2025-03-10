@@ -19,7 +19,7 @@ let handler = async (m, { conn }) => {
     user.cooldownDuelo = ahora; // Aplica el cooldown
 
     // Con 30% de probabilidad, el usuario entrena a su Magikarp
-    if (Math.random() < 0.3) {
+    if (Math.random() < 0.1) {
         // Entrenamiento: se elige un Magikarp aleatorio
         let magikarp = user.peces[Math.floor(Math.random() * user.peces.length)];
         // Guardamos los KP originales antes de entrenar
