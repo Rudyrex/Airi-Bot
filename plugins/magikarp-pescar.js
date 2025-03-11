@@ -27,7 +27,7 @@ let handler = async (m, { conn }) => {
 
   // Determinar si atrapa un Magikarp (50% de probabilidad)
   if (Math.random() < 0.5) {
-    let stickerPescar = await sticker(false, 'https://files.catbox.moe/kxjs7i.webp', packname, autor);
+    let stickerPescar = await sticker(false, 'https://files.catbox.moe/kxjs7i.webp', packname, author);
     await conn.sendFile(m.chat, stickerPescar, 'sticker.webp', '', m)
     return await conn.reply(m.chat, `🎣 Pescaste... pero se te escapó.\n¡Mas suerte para la próxima!`, m);
   }
@@ -39,7 +39,7 @@ let handler = async (m, { conn }) => {
   };
 
   user.peces.push(nuevoMagikarp);
-  let stickerMagikarp = await sticker(false, 'https://files.catbox.moe/kxjs7i.webp', packname, autor);
+  let stickerMagikarp = await sticker(false, 'https://files.catbox.moe/kxjs7i.webp', packname, author);
   await conn.sendFile(m.chat, stickerMagikarp, 'sticker.webp', '', m)
   await conn.reply(m.chat, `🎣 ¡Has atrapado un *Magikarp*!
 ⚡ KP: ${nuevoMagikarp.kp}  
