@@ -31,7 +31,7 @@ let handler = async (m, { conn }) => {
     let tag2 = `@${m.sender.replace(/@.+/, '')}`;
 
     // Mensaje de confirmación de desafío aceptado
-    let stickerDesafio = await sticker(false, 'https://files.catbox.moe/a9h0kb.webp', packname, autor);
+    let stickerDesafio = await sticker(false, 'https://files.catbox.moe/a9h0kb.webp', packname, author);
     await conn.sendFile(m.chat, stickerDesafio, 'sticker.webp', '', m)
     
     await conn.reply(m.chat, `${tag2} ha aceptado el desafío de ${tag1}! 🎣`, m, {mentions: [challenger, m.sender]});
@@ -49,7 +49,7 @@ let handler = async (m, { conn }) => {
     // Rama de Snorlax: 10% de probabilidad de que aparezca un Snorlax y se cancele el duelo
     if (Math.random() < 0.1) {
       
-      let stickerSnorlax = await sticker(false, 'https://files.catbox.moe/d9at6m.webp', packname, autor);
+      let stickerSnorlax = await sticker(false, 'https://files.catbox.moe/d9at6m.webp', packname, author);
       await conn.sendFile(m.chat, stickerSnorlax, 'sticker.webp', '', m)
       
       await conn.reply(m.chat, "Un Snorlax está durmiendo en el campo de desafío. Vuelvan más tarde cuando se haya despertado", m);
@@ -158,7 +158,7 @@ let handler = async (m, { conn }) => {
 `;
       global.db.data.users[pidgeottoSeLleva.usuario].peces = global.db.data.users[pidgeottoSeLleva.usuario].peces.filter(p => p !== pidgeottoSeLleva.magikarp);
       
-      let stickerPidgeotto = await sticker(false, 'https://files.catbox.moe/z3euuo.webp', packname, autor);
+      let stickerPidgeotto = await sticker(false, 'https://files.catbox.moe/z3euuo.webp', packname, author);
       await conn.sendFile(m.chat, stickerPidgeotto, 'sticker.webp', '', m)
     
       return conn.reply(m.chat, mensajePidgeotto, m, { mentions: [challenger, m.sender] });
@@ -174,7 +174,7 @@ let handler = async (m, { conn }) => {
 
 🏆 ${tagWinner} ha ganado por *${diffJump}m*! 🎊
 `;
-      let stickerJump = await sticker(false, 'https://files.catbox.moe/zp0te6.webp', packname, autor);
+      let stickerJump = await sticker(false, 'https://files.catbox.moe/zp0te6.webp', packname, author);
       await conn.sendFile(m.chat, stickerJump, 'sticker.webp', '', m)
     
       await conn.reply(m.chat, mensaje, m, { mentions: [challenger, m.sender] });
