@@ -35,7 +35,7 @@ let handler = async (m, { text, conn, args, usedPrefix, command }) => {
         await conn.sendMessage(m.chat, {document: {url: downloadUrl}, caption: null, mimetype: 'audio/mpeg', fileName: `${title}.mp3`}, {quoted: m});
     //╚────── ¤ ◎ node-yt-dl ◎ ¤ ──────╝
     } catch (e1) {
-        m.react(❌);
+        m.react('❌');
     }
 };
 
