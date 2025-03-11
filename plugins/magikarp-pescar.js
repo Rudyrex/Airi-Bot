@@ -1,3 +1,4 @@
+import { sticker } from '../lib/sticker.js'
 import fetch from 'node-fetch';
 
 const tiempoEspera = 15 * 60 * 1000; // 15 minutos en milisegundos
@@ -27,7 +28,9 @@ let handler = async (m, { conn }) => {
 
   // Determinar si atrapa un Magikarp (50% de probabilidad)
   if (Math.random() < 0.5) {
-    return await conn.sendAiri(m.chat, botname, botdesc, `🎣 Pescaste... pero se te escapó.\n¡Mas suerte para la próxima!`, true, thumb, null, m);
+    let stickerPescar = await sticker(false, 'https://files.catbox.moe/a9h0kb.webp', packname, autor);
+    await conn.sendFile(m.chat, stickerPescar, 'sticker.webp', '', m)
+    return await conn.reply(m.chat, `🎣 Pescaste... pero se te escapó.\n¡Mas suerte para la próxima!`, m);
   }
 
   // Crear un nuevo Magikarp
@@ -37,10 +40,11 @@ let handler = async (m, { conn }) => {
   };
 
   user.peces.push(nuevoMagikarp);
-  
-  await conn.sendAiri(m.chat, botname, botdesc, `🎣 ¡Has atrapado un *Magikarp*!.
+  let stickerMagikarp = await sticker(false, 'https://files.catbox.moe/a9h0kb.webp', packname, autor);
+  await conn.sendFile(m.chat, stickerMagikarp, 'sticker.webp', '', m)
+  await conn.reply(m.chat, `🎣 ¡Has atrapado un *Magikarp*!
 ⚡ KP: ${nuevoMagikarp.kp}  
-🎏 Ahora tienes ${user.peces.length}/3 Magikarps.`, true, thumb, null, null);
+🎏 Ahora tienes ${user.peces.length}/3 Magikarps`, m);
 }
 
 handler.help = ['pescar'];
