@@ -1,39 +1,44 @@
+import { ytdlaud } from 'savetubedl';
 import fetch from 'node-fetch';
-import { toAudio } from '../lib/converter.js';
-import { apis } from '../exports.js';
 
-let handler = async (m, { conn, args }) => {
-    if (!args[0]) return await conn.reply(m.chat, `${em} Agrega un enlace de YouTube`, m);
+const getYoutubeId = (url) => {
+    const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+    const matches = url.match(regex);
+    return matches ? matches[1] : null;
+};
 
-    let yturl = args[0];
+let handler = async (m, { text, conn, args, usedPrefix, command }) => {
+    if (!args[0]) return await conn.reply(m.chat, `${em} *Agrega un enlace de YouTube*_\n\n_Ejemplo:_\n.${command} https://www.youtube.com`, m);
+    
+    let youtubeLink = '';
+    
+    if (args[0].includes('you')) {
+        youtubeLink = args[0];
+    } else {
+        return await conn.reply(m.chat, `${em} *El enlace no es de YouTube*`, m);
+    }
+    
+    
+    const isShort = youtubeLink.includes('youtube.com/shorts/');
+    const videoId = getYoutubeId(youtubeLink);
+    
+    
+    const shortYoutubeUrl = isShort ? youtubeLink : `https://youtu.be/${videoId}`;
+    
     m.react('⏳');
-
+    
     try {
-        // Descarga el video usando la API
-        let response = await fetch(`${apis.random1}youtube-video?url=${yturl}`);
-        let result = await response.json();
-
-        if (!result.result || !result.result.downloadUrl) throw new Error('No se pudo obtener el enlace de descarga');
-        
-        let downloadUrl = result.result.downloadUrl;
-        let title = result.result.title || 'audio';
-
-        // Descarga el archivo de video
-        let videoResponse = await fetch(downloadUrl);
-        let videoBuffer = await videoResponse.buffer();
-
-        // Convierte el video a audio
-        let audio = await toAudio(videoBuffer, 'mp4');
-
-        await m.react('✅');
-        await conn.sendFile(m.chat, audio.data, `${title}.mp3`, `🎵 *${title}*`, m, null, { mimetype: 'audio/mp4' });
-    } catch (e) {
-        console.error(e);
-        await m.react('❌');
-        //await conn.reply(m.chat, `${em} Error al procesar el enlace.`, m);
+    //╔────── ¤ ◎ savetubedl ◎ ¤ ──────╗
+        let result = await ytdlaud(shortYoutubeUrl);
+        let title = result.response.titulo;
+        let downloadUrl = result.response.descarga;
+        await conn.sendMessage(m.chat, {document: {url: downloadUrl}, caption: null, mimetype: 'audio/mpeg', fileName: `${title}.mp3`}, {quoted: m});
+    //╚────── ¤ ◎ node-yt-dl ◎ ¤ ──────╝
+    } catch (e1) {
+        m.react(❌);
     }
 };
 
-handler.command = ['yta', 'ytmp3'];
+handler.command = ['ytmp3', 'yta'];
 export default handler;
-            
+    
