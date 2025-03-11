@@ -1,3 +1,5 @@
+import { sticker } from '../lib/sticker.js'
+
 let handler = async (m, { conn }) => {
     if (m.fromMe) return; // Evita que el bot se responda a sí mismo
 
@@ -18,7 +20,7 @@ let handler = async (m, { conn }) => {
     }
     user.cooldownDuelo = ahora; // Aplica el cooldown
 
-    // Con 30% de probabilidad, el usuario entrena a su Magikarp
+    // Con 10% de probabilidad, el usuario entrena a su Magikarp
     if (Math.random() < 0.1) {
         // Entrenamiento: se elige un Magikarp aleatorio
         let magikarp = user.peces[Math.floor(Math.random() * user.peces.length)];
@@ -30,8 +32,10 @@ let handler = async (m, { conn }) => {
         magikarp.kp += recompensa;
 
         let tag = `@${m.sender.replace(/@.+/, '')}`;
-        let thumbEntrenar = await (await fetch('https://files.catbox.moe/8kbwtl.jpg')).buffer();
-        await conn.sendAiri(m.chat, botname, botdesc, `El Magikarp (${originalKP} KP) de ${tag} decidió entrenar y ganó *${recompensa} KP*!`, true, thumbEntrenar, null, m);
+        
+        let stiker = await sticker(false, 'https://files.catbox.moe/fgkxw3.webp', packname, autor);
+        await conn.sendFile(m.chat, stiker, 'sticker.webp', '', m)
+        await conn.reply(m.chat, `El Magikarp (${originalKP} KP) de ${tag} decidió entrenar y ganó *${recompensa} KP*!`, m, { mentions: [m.sender] });  
     } else {
         // Si no entrena, se envía el mensaje de desafío
         let tag = `@${m.sender.replace(/@.+/, '')}`;
@@ -44,4 +48,3 @@ handler.customPrefix = /^(Magikarp jump!|Duelo|🐟)$/i;
 handler.command = new RegExp;
 
 export default handler;
-    
