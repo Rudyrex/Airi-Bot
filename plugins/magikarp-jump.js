@@ -33,7 +33,7 @@ let handler = async (m, { conn }) => {
 
         let tag = `@${m.sender.replace(/@.+/, '')}`;
         
-        let stiker = await sticker(false, 'https://files.catbox.moe/fgkxw3.webp', packname, autor);
+        let stiker = await sticker(false, 'https://files.catbox.moe/fgkxw3.webp', packname, author);
         await conn.sendFile(m.chat, stiker, 'sticker.webp', '', m)
         await conn.reply(m.chat, `El Magikarp (${originalKP} KP) de ${tag} decidió entrenar y ganó *${recompensa} KP*!`, m, { mentions: [m.sender] });  
     } else {
