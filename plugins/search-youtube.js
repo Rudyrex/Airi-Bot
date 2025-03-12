@@ -26,7 +26,7 @@ let handler = async (m, { conn, text }) => {
 *Ejemplo:* \`a 1\`
 
 *Video* ➠ Responde a este mensaje escribiendo \`v id\`
-*Ejemplo:* \`v 1\`\n\n`;
+*Ejemplo:* \`v 1\`${readMore}\n\n`;
         data.data.forEach((video, index) => {
             message += `╭─${em}──✦\n`;
             message += `│⥤🆔 *ID:* ${index + 1}\n`;
@@ -47,3 +47,5 @@ let handler = async (m, { conn, text }) => {
 handler.command = ['yts', 'ytsearch'];
 export default handler;
         
+const more = String.fromCharCode(8206)
+const readMore = more.repeat(4001)
