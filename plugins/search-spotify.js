@@ -14,7 +14,10 @@ let handler = async (m, { conn, text }) => {
             return m.reply('No se encontraron resultados para tu búsqueda.');
         }
 
-        let message = 'Spotify Search:\n\n';
+        let message = `	╭  ✦ \`\`\`Spotify Search\`\`\` ✦  ╮
+
+📥 Responde a este mensaje junto con el número del resultado que deseas.
+*Ejemplo:* \`3\`\n\n`;
         data.data.forEach((track, index) => {
             message += `╭─🌱──✦\n`;
             message += `│⥤🆔 *ID:* ${index + 1}\n`;
