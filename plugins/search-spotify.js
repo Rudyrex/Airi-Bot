@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 
 let handler = async (m, { conn, text }) => {
     if (!text) {
-        return m.reply('Por favor, ingresa un término de búsqueda.');
+        return m.reply(`${em} *Por favor ingresa un término de búsqueda*`);
     }
 
     try {
@@ -11,7 +11,7 @@ let handler = async (m, { conn, text }) => {
         const data = await response.json();
 
         if (!data.status || data.data.length === 0) {
-            return m.reply('No se encontraron resultados para tu búsqueda.');
+            return m.reply(`${em} *No se encontraron resultados para tu búsqueda*`);
         }
 
         let message = `	╭  ✦ \`\`\`Spotify Search\`\`\` ✦  ╮
@@ -31,9 +31,9 @@ let handler = async (m, { conn, text }) => {
         m.reply(message.trim());
     } catch (err) {
         console.error(err);
-        m.reply('Hubo un error al realizar la búsqueda.');
+        m.reply(`${em} *Hubo un error al realizar la búsqueda*`);
     }
 };
 
-handler.command = ['spotify', 'buscarSpotify'];
+handler.command = ['spotify', 'spotifys', 'spotifysearch'];
 export default handler;
