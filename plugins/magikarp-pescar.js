@@ -4,7 +4,7 @@ const tiempoEspera = 15 * 60 * 1000; // 15 minutos en milisegundos
 
 let handler = async (m, { conn }) => {
   let user = global.db.data.users[m.sender];
-  let thumb = await (await fetch('https://files.catbox.moe/7v2vb7.jpg')).buffer();
+ 
   
   
   // Inicializar propiedades si no existen
