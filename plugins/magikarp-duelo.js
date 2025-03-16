@@ -31,7 +31,7 @@ let handler = async (m, { conn }) => {
     let tag2 = `@${m.sender.replace(/@.+/, '')}`;
 
     // Mensaje de confirmación de desafío aceptado
-    let stickerDesafio = await sticker(false, 'https://files.catbox.moe/a9h0kb.webp', packname, author);
+    let stickerDesafio = await sticker(false, 'https://qu.ax/SrhMn.webp', packname, author);
     await conn.sendFile(m.chat, stickerDesafio, 'sticker.webp', '', m)
     
     await conn.reply(m.chat, `${tag2} ha aceptado el desafío de ${tag1}! 🎣`, m, {mentions: [challenger, m.sender]});
@@ -174,7 +174,7 @@ let handler = async (m, { conn }) => {
 
 🏆 ${tagWinner} ha ganado por *${diffJump}m*! 🎊
 `;
-      let stickerJump = await sticker(false, 'https://files.catbox.moe/zp0te6.webp', packname, author);
+      let stickerJump = await sticker(false, 'https://qu.ax/iTvsk.webp', packname, author);
       await conn.sendFile(m.chat, stickerJump, 'sticker.webp', '', m)
     
       await conn.reply(m.chat, mensaje, m, { mentions: [challenger, m.sender] });
