@@ -49,8 +49,8 @@ let handler = async (m, { conn }) => {
     // Rama de Snorlax: 10% de probabilidad de que aparezca un Snorlax y se cancele el duelo
     if (Math.random() < 0.1) {
       
-      let stickerSnorlax = await sticker(false, 'https://files.catbox.moe/d9at6m.webp', packname, author);
-      await conn.sendFile(m.chat, stickerSnorlax, 'sticker.webp', '', m)
+      //let stickerSnorlax = await sticker(false, 'https://files.catbox.moe/d9at6m.webp', packname, author);
+      //await conn.sendFile(m.chat, stickerSnorlax, 'sticker.webp', '', m)
       
       await conn.reply(m.chat, "Un Snorlax está durmiendo en el campo de desafío. Vuelvan más tarde cuando se haya despertado", m);
       return;
@@ -158,7 +158,7 @@ let handler = async (m, { conn }) => {
 `;
       global.db.data.users[pidgeottoSeLleva.usuario].peces = global.db.data.users[pidgeottoSeLleva.usuario].peces.filter(p => p !== pidgeottoSeLleva.magikarp);
       
-      let stickerPidgeotto = await sticker(false, 'https://files.catbox.moe/z3euuo.webp', packname, author);
+      let stickerPidgeotto = await sticker(false, 'https://qu.ax/CJRwV.webp', packname, author);
       await conn.sendFile(m.chat, stickerPidgeotto, 'sticker.webp', '', m)
     
       return conn.reply(m.chat, mensajePidgeotto, m, { mentions: [challenger, m.sender] });
