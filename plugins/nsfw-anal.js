@@ -15,7 +15,10 @@ let handler = async (m, { conn }) => {
 
         // Arreglo con URLs de videos
         const videos = [
-            'https://cdn2.hentaigifz.com/84578/working-on-getting-that-a-in-class.gif'
+            'https://telegra.ph/file/a11625fef11d628d3c8df.mp4',
+            'https://qu.ax/ieJeB.mp4',
+            'https://qu.ax/kBzBB.mp4',
+            'https://qu.ax/eqQHs.mp4'
         ];
         // Arreglo con textos
         const texts = [
@@ -33,7 +36,7 @@ let handler = async (m, { conn }) => {
         if ( mentionedJid == conn.user.jid ) {
             await conn.reply(m.chat, '🫣 Omitiremos eso', m);
         } else {
-            await conn.sendMessage(m.chat, { video: { url: randomVideo }, fileName: `video.mp4`, mimetype: 'video/mp4', caption: randomText, gifPlayback: true, mentions: [senderJid, mentionedJid] }, { quoted: m });    
+            await conn.sendMessage(m.chat, { video: { url: randomVideo },  caption: randomText, gifPlayback: true, mentions: [senderJid, mentionedJid] }, { quoted: m });    
         }
     } else {
         m.reply(`${em} *Los comandos +18 estan desactivados*`);
@@ -43,3 +46,4 @@ let handler = async (m, { conn }) => {
 handler.command = ['anal'];
 handler.group = true;
 export default handler;
+        
