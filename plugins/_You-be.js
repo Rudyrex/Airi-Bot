@@ -1,5 +1,5 @@
 
-import { getYoutubeDownloadLinks } from './libs/youtubeDownloader.js';
+import { getYoutubeDownloadLinks } from '../lib/youtubeDownloader.js';
 
 let handler = async (m, { conn, text }) => {
   if (!text) {
