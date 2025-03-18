@@ -4,15 +4,9 @@ let handler = async (m, { text }) => {
     if (!text) return m.reply('Por favor, proporciona una URL de YouTube.');
 
     try {
-        // Configuración de headers simulando navegador en Android 10
-        const headers = {
-            'User-Agent': 'Mozilla/5.0 (Linux; Android 10; Mobile; rv:120.0) Gecko/120.0 Firefox/120.0',
-            'Accept': 'application/json',
-        };
-
         // Primera solicitud: Obtener el ID de descarga
         const downloadUrl = `https://loader.to/ajax/download.php?format=360&url=${encodeURIComponent(text)}&api=30de256ad09118bd6b60a13de631ae2cea6e5f9d`;
-        const response1 = await axios.get(downloadUrl, { headers });
+        const response1 = await axios.get(downloadUrl);
 
         if (!response1.data || !response1.data.id) {
             console.log('Respuesta 1:', response1.data);
@@ -24,7 +18,7 @@ let handler = async (m, { text }) => {
 
         // Segunda solicitud: Obtener el progreso de la descarga
         const progressUrl = `https://p.oceansaver.in/api/progress?id=${id}`;
-        const response2 = await axios.get(progressUrl, { headers });
+        const response2 = await axios.get(progressUrl);
 
         m.reply(`Progreso obtenido:\n\`\`\`${JSON.stringify(response2.data, null, 2)}\`\`\``);
 
@@ -34,6 +28,6 @@ let handler = async (m, { text }) => {
     }
 };
 
-handler.command = ['d900'];
+handler.command = ['d988'];
 export default handler;
-            
+        
