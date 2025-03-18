@@ -31,9 +31,8 @@ let handler = async (m, { conn, text }) => {
             
             const data2 = response2.data;
 
-            
-            m.reply(`*Respuesta de la primera solicitud (loader.to):*\n\n\`\`\`json\nJSON.stringify(data1, null, 2)̀̀`̀);
-            m.reply(`*Respuesta de la segunda solicitud (oceansaver):*̀̀j̀son{JSON.stringify(data2, null, 2)}\n\`\`\``);
+            m.reply(`*Respuesta de la primera solicitud (loader.to):*\n\nJSON.stringify(data1, null, 2)`);
+            m.reply(`*Respuesta de la segunda solicitud (oceansaver):*\n\nJSON.stringify(data2, null, 2)`);
         } else {
             m.reply("No se pudo obtener información del video.");
         }
