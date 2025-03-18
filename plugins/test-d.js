@@ -38,7 +38,7 @@ let handler = async (m, { conn, text }) => {
         }
     } catch (error) {
         console.error(error);
-        m.reply("Hubo un error al procesar la solicitud.");
+        m.reply(`Hubo un error al procesar la solicitud: ${error.message}`);
     }
 };
 
