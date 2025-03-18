@@ -1,11 +1,12 @@
 import axios from 'axios';
 
-let handler = async (m, { conn, args }) => {
-    const videoUrl = args[0];
-
-    if (!videoUrl) {
+let handler = async (m, { conn, text }) => {
+    if (!text) {
         return m.reply("Por favor, proporciona la URL del video de YouTube.");
     }
+    let videoUrl = text;
+
+    
 
     try {
         
