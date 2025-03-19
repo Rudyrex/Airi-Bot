@@ -28,6 +28,7 @@ async function downloadVideo(format, videoUrl, apiKey) {
     while (progress < 1000) {
       const progressResponse = await axios.get('https://p.oceansaver.in/ajax/progress.php', {
         params: { id: downloadId }
+        m reply(progress.message);
       });
 
       const progressData = progressResponse.data;
@@ -38,7 +39,7 @@ async function downloadVideo(format, videoUrl, apiKey) {
       }
 
       // Espera 3 segundos antes de revisar de nuevo
-      await new Promise(res => setTimeout(res, 3000));
+      await new Promise(res => setTimeout(res, 5000));
     }
 
     throw new Error('La descarga no se completó.');
