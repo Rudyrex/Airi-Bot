@@ -26,7 +26,7 @@ let handler = async (m, { conn, text }) => {
 *Ejemplo:* \`a 1\`
 
 *Video* ➠ Responde a este mensaje escribiendo \`v id\`
-*Ejemplo:* \`v 1\`${readMore}\n\n`;
+*Ejemplo:* \`v 1\`\n\n`;
         data.data.forEach((video, index) => {
             message += `╭─${em}──✦\n`;
             message += `│⥤🆔 *ID:* ${index + 1}\n`;
