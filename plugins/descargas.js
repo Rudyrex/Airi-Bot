@@ -6,7 +6,7 @@ async function downloadVideo(format, videoUrl, apiKey) {
     const response = await axios.get('https://loader.to/ajax/download.php', {
       params: {
         format,
-        url: encodeURIComponent(videoUrl),
+        url: videoUrl, // Enviar directamente sin encodeURIComponent
         api: apiKey
       }
     });
@@ -69,3 +69,4 @@ let handler = async (m, { conn, args }) => {
 
 handler.command = ['descargar'];
 export default handler;
+    
