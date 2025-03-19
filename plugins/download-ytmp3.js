@@ -26,7 +26,7 @@ let handler = async (m, { text, conn, args, usedPrefix, command }) => {
 
     try {
         
-        const apiUrl = `https://cloudseek-api.vercel.app/y2loader?url=${encodeURIComponent(shortYoutubeUrl)}&format=mp3`;
+        const apiUrl = `https://cloudseek-api.vercel.app/y2loader?url=${shortYoutubeUrl}&format=mp3`;
         const response = await fetch(apiUrl);
         const result = await response.json();
 
