@@ -54,7 +54,7 @@ let handler = async (m, { conn, args }) => {
   }
 
   const [format, videoUrl] = args;
-  const apiKey = 'TU_API_KEY_AQUI';
+  const apiKey = 'fbac049a63e8cc81f918214fb3407db067b3beca';
 
   m.reply('⏳ Iniciando descarga...');
 
