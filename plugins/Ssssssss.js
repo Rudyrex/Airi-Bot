@@ -18,7 +18,7 @@ async function downloadVideo(format, videoUrl, apiKey, m) {
     }
 
     const data = response.data;
-    m.reply(`📥 Respuesta de inicio de descarga: \n\`\`\`${JSON.stringify(data, null, 2)}\`\`\``);
+    m.reply(`📥 Respuesta de inicio de descarga:\n\`\`\`${JSON.stringify(data, null, 2)}\`\`\``);
 
     if (!data.success) {
       throw new Error(`Error al iniciar la descarga: ${data.text}`);
@@ -36,9 +36,9 @@ async function downloadVideo(format, videoUrl, apiKey, m) {
       });
 
       const progressData = progressResponse.data;
-      m.reply(`📊 Progreso actual: ${progressData.progress}`);
-
       progress = progressData.progress;
+
+      m.reply(`📊 Progreso: ${progress}\n\`\`\`${JSON.stringify(progressData, null, 2)}\`\`\``);
 
       if (progressData.success === 1 && progressData.download_url) {
         m.reply(`✅ Enlace de descarga obtenido: ${progressData.download_url}`);
@@ -48,13 +48,10 @@ async function downloadVideo(format, videoUrl, apiKey, m) {
       // Espera 3 segundos antes de revisar de nuevo
       await new Promise(res => setTimeout(res, 3000));
     }
-    const data2 = progressResponse.data;
-    m.reply(`📥 Respuesta de inicio de descarga: \n\`\`\`${JSON.stringify(data, null, 2)}\`\`\``);
-      
+
     throw new Error('La descarga no se completó.');
   } catch (error) {
     m.reply(`❌ Error: ${error.message}`);
-    
     console.error('Error:', error.message);
     return null;
   }
@@ -81,3 +78,4 @@ let handler = async (m, { conn, args }) => {
 
 handler.command = ['descargar'];
 export default handler;
+  
