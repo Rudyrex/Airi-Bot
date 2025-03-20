@@ -54,7 +54,7 @@ async function downloadVideo(format, videoUrl, apiKey, m) {
 }
 
 let handler = async (m, { conn, args }) => {
-  if (args.length < 2) {
+  if (args.length < 1) {
     return m.reply('Uso: *!descargar [formato] [url]*\nEjemplo: *!descargar mp3 https://www.youtube.com/watch?v=abcd1234*');
   }
   
