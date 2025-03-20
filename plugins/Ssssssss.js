@@ -1,12 +1,14 @@
 import axios from 'axios';
 
-async function downloadVideo(format, videoUrl, apiKey) {
+async function downloadVideo(format, videoUrl, apiKey, m) {
   try {
+    m.reply('🚀 Iniciando solicitud de descarga...');
+
     // Inicia la descarga
     const response = await axios.get('https://loader.to/ajax/download.php', {
       params: {
         format,
-        url: videoUrl, // Enviar directamente sin encodeURIComponent
+        url: videoUrl,
         api: apiKey
       }
     });
@@ -16,6 +18,7 @@ async function downloadVideo(format, videoUrl, apiKey) {
     }
 
     const data = response.data;
+    m.reply(`📥 Respuesta de inicio de descarga: \n\`\`\`${JSON.stringify(data, null, 2)}\`\`\``);
 
     if (!data.success) {
       throw new Error(`Error al iniciar la descarga: ${data.text}`);
@@ -24,26 +27,31 @@ async function downloadVideo(format, videoUrl, apiKey) {
     const downloadId = data.id;
     let progress = 0;
 
+    m.reply(`⏳ Descarga iniciada. ID: ${downloadId}`);
+
     // Espera hasta que el progreso llegue a 1000 o que el link de descarga esté disponible
     while (progress < 1000) {
       const progressResponse = await axios.get('https://p.oceansaver.in/ajax/progress.php', {
         params: { id: downloadId }
-        m reply(progress.message);
       });
 
       const progressData = progressResponse.data;
+      m.reply(`📊 Progreso actual: ${progressData.progress}`);
+
       progress = progressData.progress;
 
       if (progressData.success === 1 && progressData.download_url) {
+        m.reply(`✅ Enlace de descarga obtenido: ${progressData.download_url}`);
         return progressData.download_url;
       }
 
       // Espera 3 segundos antes de revisar de nuevo
-      await new Promise(res => setTimeout(res, 5000));
+      await new Promise(res => setTimeout(res, 3000));
     }
 
     throw new Error('La descarga no se completó.');
   } catch (error) {
+    m.reply(`❌ Error: ${error.message}`);
     console.error('Error:', error.message);
     return null;
   }
@@ -59,7 +67,7 @@ let handler = async (m, { conn, args }) => {
 
   m.reply('⏳ Iniciando descarga...');
 
-  const downloadUrl = await downloadVideo(format, videoUrl, apiKey);
+  const downloadUrl = await downloadVideo(format, videoUrl, apiKey, m);
 
   if (downloadUrl) {
     m.reply(`✅ Descarga lista: ${downloadUrl}`);
@@ -68,6 +76,5 @@ let handler = async (m, { conn, args }) => {
   }
 };
 
-handler.command = ['desyt'];
+handler.command = ['descargar'];
 export default handler;
-
