@@ -57,8 +57,9 @@ let handler = async (m, { conn, args }) => {
   if (args.length < 2) {
     return m.reply('Uso: *!descargar [formato] [url]*\nEjemplo: *!descargar mp3 https://www.youtube.com/watch?v=abcd1234*');
   }
-
-  const [format, videoUrl] = args;
+  
+  const format = '360'
+  const videoUrl = args[0];
   const apiKey = 'fbac049a63e8cc81f918214fb3407db067b3beca';
 
   m.reply('⏳ Iniciando descarga...');
@@ -67,6 +68,12 @@ let handler = async (m, { conn, args }) => {
 
   if (downloadUrl) {
     m.reply(`✅ Descarga lista: ${downloadUrl}`);
+    await conn.sendMessage(m.chat, {
+                document: { url: downloadUrl },
+                caption: null,
+                mimetype: 'video/mp4',
+                fileName: `video.mp4`
+            }, { quoted: m });
   } else {
     m.reply('❌ Hubo un error al descargar el video.');
   }
@@ -74,3 +81,4 @@ let handler = async (m, { conn, args }) => {
 
 handler.command = ['descargar'];
 export default handler;
+    
