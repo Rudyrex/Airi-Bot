@@ -48,10 +48,13 @@ async function downloadVideo(format, videoUrl, apiKey, m) {
       // Espera 3 segundos antes de revisar de nuevo
       await new Promise(res => setTimeout(res, 3000));
     }
-
+    const data2 = progressResponse.data;
+    m.reply(`📥 Respuesta de inicio de descarga: \n\`\`\`${JSON.stringify(data, null, 2)}\`\`\``);
+      
     throw new Error('La descarga no se completó.');
   } catch (error) {
     m.reply(`❌ Error: ${error.message}`);
+    
     console.error('Error:', error.message);
     return null;
   }
