@@ -25,21 +25,19 @@ async function downloadVideo(format, videoUrl, apiKey, m) {
     }
 
     const downloadId = data.id;
-    let progress = 0;
-
     m.reply(`⏳ Descarga iniciada. ID: ${downloadId}`);
 
-    // Espera hasta que el progreso llegue a 1000 o que el link de descarga esté disponible
-    while (progress < 1000) {
+    // Revisión continua hasta que se complete la descarga
+    while (true) {
       const progressResponse = await axios.get('https://p.oceansaver.in/ajax/progress.php', {
         params: { id: downloadId }
       });
 
       const progressData = progressResponse.data;
-      progress = progressData.progress;
 
-      m.reply(`📊 Progreso: ${progress}\n\`\`\`${JSON.stringify(progressData, null, 2)}\`\`\``);
+      m.reply(`📊 Progreso: ${progressData.progress}\n\`\`\`${JSON.stringify(progressData, null, 2)}\`\`\``);
 
+      // Verificar si la descarga se completó
       if (progressData.success === 1 && progressData.download_url) {
         m.reply(`✅ Enlace de descarga obtenido: ${progressData.download_url}`);
         return progressData.download_url;
@@ -48,8 +46,6 @@ async function downloadVideo(format, videoUrl, apiKey, m) {
       // Espera 3 segundos antes de revisar de nuevo
       await new Promise(res => setTimeout(res, 3000));
     }
-
-    throw new Error('La descarga no se completó.');
   } catch (error) {
     m.reply(`❌ Error: ${error.message}`);
     console.error('Error:', error.message);
@@ -78,4 +74,3 @@ let handler = async (m, { conn, args }) => {
 
 handler.command = ['descargar'];
 export default handler;
-  
