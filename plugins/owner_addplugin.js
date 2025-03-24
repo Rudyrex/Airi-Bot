@@ -15,7 +15,7 @@ let handler = async (m, { conn, isROwner, usedPrefix, command, text }) => {
 *.addplugin* <nombre> <script>
 
 *.addplugin* hola-mundo let handler = async (m, { conn }) => {
-        m.reply(`Hola mundo`);
+        m.reply('Hola mundo');
 }
 handler.command = /^(hola)$/i
 export default handler`);
