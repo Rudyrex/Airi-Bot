@@ -92,6 +92,7 @@
         "pinterest.js": "^1.0.5",
         "ruhend-scraper": "^8.0.8",
         "savetubedl": "^3.0.0",
+        "qs": "^6.14.0",
         "@vreden/youtube_scraper": "^1.2.3",
         "yargs": "^17.6.0" 
     },
