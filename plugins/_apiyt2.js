@@ -15,7 +15,7 @@ let handler = async (m, { args, conn }) => {
 
         const result = response.data.result;
         console.log(result);
-        if (!result) throw new Error('No se pudo obtener información del video.');
+        //if (!result) throw new Error('No se pudo obtener información del video.');
 
         const downloadUrl = result.videos?.[0]?.url;
         const title = result.title || 'video';
