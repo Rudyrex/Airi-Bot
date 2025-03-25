@@ -421,16 +421,16 @@ export async function handler(chatUpdate) {
 
 global.dfail = (type, m, conn, usedPrefix) => {
     let msg = {
-        rowner: `╔────── ¤ ◎ ⚠️ ◎ ¤ ──────╗\n_Este comando solo puede ser utilizado por el propietario del bot_`,
-        owner: `╔────── ¤ ◎ ⚠️ ◎ ¤ ──────╗\n_Este comando solo puede ser utilizado por el propietario del bot_`,
-        mods: `╔────── ¤ ◎ ⚠️ ◎ ¤ ──────╗\n_Este comando solo puede ser utilizado por los moderadores del bot_`,
-        premium: `╔────── ¤ ◎ ⚠️ ◎ ¤ ──────╗\n_Este comando solo puede ser utilizado por usuarios premium_`,
-        group: `╔────── ¤ ◎ ⚠️ ◎ ¤ ──────╗\n_Este comando solo puede ser utilizado en grupos_`,
-        private: `╔────── ¤ ◎ ⚠️ ◎ ¤ ──────╗\n_Este comando solo puede ser utilizado en el chat privado_`,
-        admin: `╔────── ¤ ◎ ⚠️ ◎ ¤ ──────╗\n_Este comando solo puede ser utilizado por los administradores del grupo_`,
-        botAdmin: `╔────── ¤ ◎ ⚠️ ◎ ¤ ──────╗_Necesito ser administrador para ejecutar este comando_`,
-        unreg: `╔────── ¤ ◎ ⚠️ ◎ ¤ ──────╗\n_Para usar este comando debes estar registrad@_\n\nUtiliza: *.reg nombre.edad*\n\nEjemplo: .reg Airi.17`,
-        restrict: `╔────── ¤ ◎ ⚠️ ◎ ¤ ──────╗\n_Este comando está restringido_`  
+        rowner: `${em} *Este comando solo puede ser utilizado por el propietario del bot*`,
+        owner: `${em} *Este comando solo puede ser utilizado por el propietario del bot*`,
+        mods: `${em} *Este comando solo puede ser utilizado por los moderadores del bot*`,
+        premium: `${em} *Este comando solo puede ser utilizado por usuarios premium*`,
+        group: `${em} *Este comando solo puede ser utilizado en grupos*`,
+        private: `${em} *Este comando solo puede ser utilizado en el chat privado*`,
+        admin: `${em} *Este comando solo puede ser utilizado por los administradores del grupo*`,
+        botAdmin: `${em} *Necesito ser administrador para ejecutar este comando*`,
+        unreg: `${em} *Para usar este comando debes estar registrad@*\n\nUtiliza: *.reg nombre.edad*\n\nEjemplo: .reg Airi.17`,
+        restrict: `${em} *Este comando está restringido*`  
     }[type]
     if (msg) return conn.reply(m.chat, msg, m).then(_ => m.react('✖️'))
 }
