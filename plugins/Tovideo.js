@@ -6,17 +6,27 @@ import { spawn } from 'child_process';
 import FormData from 'form-data';
 import { promisify } from 'util';
 import { pipeline } from 'stream';
+import { fileURLToPath } from 'url';
+
 const streamPipeline = promisify(pipeline);
+
+// Obtener __dirname en módulos ES
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 let handler = async (m, { conn }) => {
   // Validar que se responda a un sticker
   const quoted = m.message?.extendedTextMessage?.contextInfo?.quotedMessage?.stickerMessage;
   if (!quoted) {
-    await conn.sendMessage(m.chat, { text: "⚠️ Responde a un sticker para convertirlo a video." }, { quoted: m });
+    await conn.sendMessage(
+      m.chat,
+      { text: "⚠️ Responde a un sticker para convertirlo a video." },
+      { quoted: m }
+    );
     return;
   }
 
-  // Reaccionar con ⏳ para indicar que se está procesando, mi bebesito
+  // Reaccionar con ⏳ para indicar que se está procesando, mi rey
   m.react('⏳');
 
   try {
@@ -41,7 +51,7 @@ let handler = async (m, { conn }) => {
     });
     if (!upload.data?.url) throw new Error("No se pudo subir el sticker.");
 
-    // Convertir a video usando la API
+    // Pasar la URL a la API para convertir a video
     const conv = await axios.get(`https://api.neoxr.eu/api/webp2mp4?url=${encodeURIComponent(upload.data.url)}&apikey=russellxz`);
     const videoUrl = conv.data?.data?.url;
     if (!videoUrl) throw new Error("No se pudo convertir el sticker a video.");
@@ -51,25 +61,34 @@ let handler = async (m, { conn }) => {
     const tempMp4 = path.join(tmpDir, `${Date.now()}_orig.mp4`);
     await streamPipeline(res.data, fs.createWriteStream(tempMp4));
 
-    // Convertir el video con ffmpeg para compatibilidad
+    // Convertir con ffmpeg para compatibilidad
     await new Promise((resolve, reject) => {
-      const ff = spawn('ffmpeg', ['-i', tempMp4, '-c:v', 'libx264', '-preset', 'fast', '-pix_fmt', 'yuv420p', outputPath]);
+      const ff = spawn('ffmpeg', [
+        '-i', tempMp4,
+        '-c:v', 'libx264',
+        '-preset', 'fast',
+        '-pix_fmt', 'yuv420p',
+        outputPath
+      ]);
       ff.on('exit', code => code === 0 ? resolve() : reject(new Error("Error en ffmpeg")));
     });
 
-    // Enviar el video final al chat
-    await conn.sendMessage(m.chat, {
-      video: fs.readFileSync(outputPath),
-      mimetype: 'video/mp4',
-      caption: '✅ Sticker convertido a video.\n\n© Azura Ultra 2.0'
-    }, { quoted: m });
+    // Enviar el video final
+    await conn.sendMessage(
+      m.chat,
+      {
+        video: fs.readFileSync(outputPath),
+        mimetype: 'video/mp4',
+        caption: '✅ Sticker convertido a video.\n\n© Azura Ultra 2.0'
+      },
+      { quoted: m }
+    );
 
     // Eliminar archivos temporales
     fs.unlinkSync(inputPath);
     fs.unlinkSync(tempMp4);
     fs.unlinkSync(outputPath);
 
-    // Reaccionar con ✅ al terminar, mi rey
     m.react('✅');
   } catch (e) {
     console.error(e);
