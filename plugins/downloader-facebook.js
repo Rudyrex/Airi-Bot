@@ -30,7 +30,7 @@ let handler = async (m, { args, conn }) => {
 
     } catch (err) {
         await m.react('❌');
-        await conn.reply(m.chat, `${em} *No se pudo descargar el video*`, m);
+        await conn.reply(m.chat, `${em} *No se pudo descargar el video*\n${err.message}`, m);
     }
 };
 
