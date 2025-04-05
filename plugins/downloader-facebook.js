@@ -23,12 +23,13 @@ let handler = async (m, { args, conn }) => {
         await m.react('✅');
         await conn.sendMessage(m.chat, {
             video: { url: videoUrl },
-            fileName: result.filename,
+            fileName: 'video.mp4',
             mimetype: 'video/mp4',
             caption: null
         }, { quoted: m });
 
     } catch (err) {
+        console.log(err);
         await m.react('❌');
         await conn.reply(m.chat, `${em} *No se pudo descargar el video*\n${err.message}`, m);
     }
