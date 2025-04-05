@@ -1,30 +1,39 @@
-
 import fetch from 'node-fetch';
-import { apis } from '../exports.js';
+import facebookDownloader from '../lib/fbscrape.js';
 
-let handler = async (m, { text, conn, args, usedPrefix, command }) => {
-    
-    if (!args[0]) return await conn.reply(m.chat, `⚠️ Agrega un enlace de *Facebook*`, m);
-    let fburl = args[0]
-    m.react('🔥')
-    
+let handler = async (m, { args, conn }) => {
+    if (!args[0]) return await conn.reply(m.chat, `${em} *Agrega un enlace de Facebook*`, m);
+
+    const fburl = args[0];
+    m.react('⏳');
+
     try {
-        let api1 = await fetch(`${apis.delirius}download/facebook?url=${fburl}`);
-        let result1 = await api1.json()
-        let downloadUrl1 = result1.urls[0].hd || result1.urls[1].sd;
-        
-        
-        await await conn.sendMessage(m.chat, { video: { url: downloadUrl1 }, fileName: `Facebook.mp4`, mimetype: 'video/mp4', caption: null }, { quoted: m });
-    } catch (e1) {
-        try {
+        // Extraer ID o shortlink del enlace
+        const match = fburl.match(/(?:\/videos\/|\/reel\/|\/watch\/|\?v=)([0-9A-Za-z_-]+)/);
+        const id = match ? match[1] : null;
+        const shortLink = fburl.includes('fb.watch') ? fburl.split('/').pop() : null;
 
-        } catch (e2) {
-            await conn.reply(m.chat, e2.message, m);
+        const result = await facebookDownloader({ id, shortLink });
+
+        if (result.error) {
+            throw new Error(`Error al obtener el video: ${result.error}`);
         }
-                
+
+        const videoUrl = result.urls;
+        await m.react('✅');
+        await conn.sendMessage(m.chat, {
+            video: { url: videoUrl },
+            fileName: result.filename,
+            mimetype: 'video/mp4',
+            caption: null
+        }, { quoted: m });
+
+    } catch (err) {
+        await m.react('❌');
+        await conn.reply(m.chat, `${em} *No se pudo descargar el video*`, m);
     }
 };
 
 handler.command = ['facebook', 'fb', 'fbdl'];
 export default handler;
-                                                 
+        
